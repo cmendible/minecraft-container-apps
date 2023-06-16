@@ -9,5 +9,14 @@ output "mi_client_id" {
 }
 
 output "minecraft_server_fqdn" {
-  value     = jsondecode(azapi_resource.minecraft_server.output).properties.configuration.ingress.fqdn
+  value = jsondecode(azapi_resource.minecraft_server.output).properties.configuration.ingress.fqdn
+}
+
+output "openai_endpoint" {
+  value = azurerm_cognitive_account.openai.endpoint
+}
+
+output "openai_key" {
+  sensitive = true
+  value     = azurerm_cognitive_account.openai.primary_access_key
 }

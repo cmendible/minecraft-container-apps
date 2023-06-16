@@ -83,6 +83,14 @@ resource "azapi_resource" "minecraft_server" {
             }
             env = [
               {
+                name  = "AZURE_OPENAI_ENDPOINT"
+                value = "${azurerm_cognitive_account.openai.endpoint}"
+              },
+              {
+                name  = "AZURE_OPENAI_API_KEY"
+                value = "${azurerm_cognitive_account.openai.primary_access_key}"
+              },
+              {
                 name  = "EULA"
                 value = "TRUE"
               },

@@ -33,3 +33,7 @@ variable "cae_name" {
 variable "logws_name" {
   default = "logws-cae"
 }
+
+variable "aoai_name" {
+  default = "aoai-minecraft-bot"
+}
