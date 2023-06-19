@@ -14,6 +14,12 @@ resource "azapi_resource" "minecraft_bot" {
     properties : {
       managedEnvironmentId = "${azurerm_container_app_environment.cae.id}"
       configuration = {
+        secrets = [
+          {
+            name  = "azureopenaiapikey"
+            value = "${azurerm_cognitive_account.openai.primary_access_key}"
+          }
+        ]
         ingress = {
           external   = true
           targetPort = 8080
@@ -35,7 +41,7 @@ resource "azapi_resource" "minecraft_bot" {
         containers = [
           {
             name  = "minecraft-bot"
-            image = "cmendibl3/minecraft-bot"
+            image = "cmendibl3/minecraft-bot:0.1.0"
             resources = {
               cpu    = 0.5
               memory = "1Gi"
@@ -48,6 +54,18 @@ resource "azapi_resource" "minecraft_bot" {
               {
                 name  = "MINECRAFT_BOT_NAME"
                 value = "vicky"
+              },
+              {
+                name  = "AZURE_OPENAI_ENDPOINT"
+                value = "${azurerm_cognitive_account.openai.endpoint}"
+              },
+              {
+                name  = "AZURE_OPENAI_DEPLOYMENT"
+                value = "gpt-35-turbo"
+              },
+              {
+                name      = "AZURE_OPENAI_API_KEY"
+                secretRef = "azureopenaiapikey"
               }
             ],
           },

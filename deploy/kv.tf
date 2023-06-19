@@ -41,9 +41,3 @@ resource "azurerm_key_vault" "kv" {
     storage_permissions = []
   }
 }
-
-# resource "azurerm_key_vault_secret" "cognitive" {
-#   name         = "cognitiveServicesKey"
-#   value        = azurerm_cognitive_account.cognitive.primary_access_key
-#   key_vault_id = azurerm_key_vault.kv.id
-# }

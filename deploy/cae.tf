@@ -40,39 +40,6 @@ resource "azapi_resource" "minecraft_server" {
         }
       }
       template = {
-        initContainers = [
-          {
-            name  = "spigot-setup"
-            image = "busybox"
-            resources = {
-              cpu    = 0.25
-              memory = "0.5Gi"
-            }
-            command = [
-              "sh",
-              "-c",
-              "/setup/setup.sh"
-            ]
-            volumeMounts = [
-              {
-                volumeName = "data-volume"
-                mountPath  = "/data"
-              },
-              {
-                volumeName = "java-volume"
-                mountPath  = "/graalvm"
-              },
-              {
-                volumeName = "rcon-volume"
-                mountPath  = "/mcrcon"
-              },
-              {
-                volumeName = "setup-volume"
-                mountPath  = "/setup"
-              }
-            ]
-          }
-        ]
         containers = [
           {
             name  = "mc"
@@ -82,14 +49,6 @@ resource "azapi_resource" "minecraft_server" {
               memory = "3Gi"
             }
             env = [
-              {
-                name  = "AZURE_OPENAI_ENDPOINT"
-                value = "${azurerm_cognitive_account.openai.endpoint}"
-              },
-              {
-                name  = "AZURE_OPENAI_API_KEY"
-                value = "${azurerm_cognitive_account.openai.primary_access_key}"
-              },
               {
                 name  = "EULA"
                 value = "TRUE"
@@ -144,47 +103,6 @@ resource "azapi_resource" "minecraft_server" {
             ],
             volumeMounts = [
               {
-                volumeName = "java-volume"
-                mountPath  = "/graalvm"
-              },
-              {
-                volumeName = "rcon-volume"
-                mountPath  = "/mcrcon"
-              },
-              {
-                volumeName = "setup-volume"
-                mountPath  = "/setup"
-              },
-              {
-                volumeName = "data-volume"
-                mountPath  = "/data"
-              }
-            ]
-          },
-          {
-            name  = "spigot-ops-fix"
-            image = "ubuntu"
-            resources = {
-              cpu    = 0.25
-              memory = "0.5Gi"
-            }
-            command = [
-              "sh",
-              "-c",
-              "/setup/ops-fix.sh"
-            ]
-            # args = [
-            # ]
-            volumeMounts = [
-              {
-                volumeName = "rcon-volume"
-                mountPath  = "/mcrcon"
-              },
-              {
-                volumeName = "setup-volume"
-                mountPath  = "/setup"
-              },
-              {
                 volumeName = "data-volume"
                 mountPath  = "/data"
               }
@@ -196,21 +114,6 @@ resource "azapi_resource" "minecraft_server" {
           maxReplicas = 1
         }
         volumes = [
-          {
-            name        = "java-volume"
-            storageName = "${azurerm_container_app_environment_storage.java.name}"
-            storageType = "AzureFile"
-          },
-          {
-            name        = "rcon-volume"
-            storageName = "${azurerm_container_app_environment_storage.rcon.name}"
-            storageType = "AzureFile"
-          },
-          {
-            name        = "setup-volume"
-            storageName = "${azurerm_container_app_environment_storage.scripts.name}"
-            storageType = "AzureFile"
-          },
           {
             name        = "data-volume"
             storageName = "${azurerm_container_app_environment_storage.data.name}"
@@ -224,11 +127,12 @@ resource "azapi_resource" "minecraft_server" {
 }
 
 resource "azurerm_storage_account" "st" {
-  name                     = local.storage_name
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = azurerm_resource_group.rg.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
+  name                            = local.storage_name
+  resource_group_name             = azurerm_resource_group.rg.name
+  location                        = azurerm_resource_group.rg.location
+  account_tier                    = "Standard"
+  account_replication_type        = "LRS"
+  allow_nested_items_to_be_public = false
 }
 
 resource "azurerm_storage_share" "share" {
