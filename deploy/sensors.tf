@@ -35,7 +35,7 @@ resource "azapi_resource" "dapr_sensors_actors" {
         containers = [
           {
             name  = "dapr-sensors-actors"
-            image = "cmendibl3/dapr.sensors.actors"
+            image = "cmendibl3/dapr.sensors.actors:0.1.0"
             resources = {
               cpu    = 0.5
               memory = "1Gi"
@@ -77,7 +77,7 @@ resource "azapi_resource" "dapr_sensors_client" {
         containers = [
           {
             name  = "dapr-sensors-actors"
-            image = "cmendibl3/dapr.sensors.client"
+            image = "cmendibl3/dapr.sensors.client:0.1.0"
             resources = {
               cpu    = 0.5
               memory = "1Gi"
@@ -136,7 +136,7 @@ resource "azapi_resource" "dapr_sensors_average" {
         containers = [
           {
             name  = "dapr-sensors-average"
-            image = "cmendibl3/dapr.sensors.average"
+            image = "cmendibl3/dapr.sensors.average:0.1.0"
             resources = {
               cpu    = 0.5
               memory = "1Gi"

@@ -16,5 +16,5 @@ RUN dotnet publish -c release
 
 # Final stage / image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
-COPY --from=build /src/dapr.sensors.actors/bin/release/net5.0/publish ./
+COPY --from=build /src/dapr.sensors.actors/bin/release/net7.0/publish ./
 ENTRYPOINT ["dotnet", "dapr.sensors.actors.dll"]
