@@ -3,6 +3,6 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Dapr.Actors" Version="1.11.0" />
+    <PackageReference Include="Dapr.Actors" Version="1.11.0-rc02" />
   </ItemGroup>
 </Project>
