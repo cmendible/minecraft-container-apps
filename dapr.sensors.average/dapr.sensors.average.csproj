@@ -3,8 +3,8 @@
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Dapr.AspNetCore" Version="1.11.0-rc02" />
-    <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.11.0-rc02" />
+    <PackageReference Include="Dapr.AspNetCore" Version="1.10.0" />
+    <PackageReference Include="Dapr.Actors.AspNetCore" Version="1.10.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dapr.sensors.interfaces\dapr.sensors.interfaces.csproj" />
