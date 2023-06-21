@@ -184,6 +184,11 @@ app.get("/dapr/subscribe", (req, res) => {
       topic: "temperature",
       route: "temperature",
     },
+    {
+      pubsubname: "messagebus",
+      topic: "tnt",
+      route: "tnt",
+    },
   ]);
 });
 
@@ -191,6 +196,27 @@ app.post("/temperature", (req, res) => {
   try {
     let message = req.body.data;
     console.log(`Average: ${message}`);
+
+    // bot.chat(`Average: what?`);
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
+
+app.post("/tnt", (req, res) => {
+  try {
+    let message = req.body.data;
+    console.log(`lasttnt: ${message}`);
+    bot.chat(`lasttnt: ${message}`);
+
+    // Create TNT Block
+    // const tnt = bot.findBlock({ point: bot.entity.position, matching: "minecraft:tnt" });  
+    // if (tnt == null) {
+    //   return;
+    // }
+    // bot.placeBlock(tnt, new Vec3(0,-1,0));
 
     // bot.chat(`Average: what?`);
     res.sendStatus(200);
