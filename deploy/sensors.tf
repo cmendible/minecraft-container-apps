@@ -82,7 +82,7 @@ resource "azapi_resource" "dapr_sensors_client" {
               cpu    = 0.5
               memory = "1Gi"
             }
-             command = [
+            command = [
               "sh",
               "-c",
               "sleep 10 && dotnet dapr.sensors.client.dll"
@@ -170,7 +170,7 @@ resource "azapi_resource" "dapr_minecraft_poll" {
       managedEnvironmentId = "${azurerm_container_app_environment.cae.id}"
       configuration = {
         ingress = {
-          external   = false
+          external   = true
           targetPort = 80
           transport  = "Http"
 
@@ -190,7 +190,7 @@ resource "azapi_resource" "dapr_minecraft_poll" {
         containers = [
           {
             name  = "dapr-minecraft-poll"
-            image = "manuss20/dapr.minecraft.poll:0.1.0"
+            image = "cmendibl3/dapr.minecraft.poll:0.1.0"
             resources = {
               cpu    = 0.5
               memory = "1Gi"

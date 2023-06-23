@@ -54,29 +54,22 @@ resource "azapi_resource" "minecraft_server" {
                 value = "TRUE"
               },
               {
-                name  = "JVM_DD_OPTS"
-                value = "polyglot.js.nashorn-compat=true"
-              },
-              {
                 name  = "ONLINE_MODE"
                 value = "FALSE"
               },
               {
-                name  = "OPS"
-                value = "cmendibl3,lordvanmanu,vicky,0Gis0"
+                name  = "OVERRIDE_OPS"
+                value = "FALSE"
               },
               {
-                name  = "OVERRIDE_OPS"
-                value = "TRUE"
+                name  = "OPS_FILE"
+                value = "./ops.json"
               },
               {
                 name  = "ENABLE_RCON"
                 value = "TRUE"
               },
               {
-                name  = "RCON_PASSWORD"
-                value = "rcon231418."
-                }, {
                 name  = "SPAWN_MONSTERS"
                 value = "FALSE"
               },
@@ -91,14 +84,6 @@ resource "azapi_resource" "minecraft_server" {
               {
                 name  = "MODE"
                 value = "creative"
-              },
-              {
-                name  = "PATH"
-                value = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/graalvm/graalvm-ce-java16-21.2.0/bin"
-              },
-              {
-                name  = "JAVA_HOME"
-                value = "/graalvm/graalvm-ce-java16-21.2.0"
               }
             ],
             volumeMounts = [
@@ -141,30 +126,10 @@ resource "azurerm_storage_share" "share" {
   quota                = 5
 }
 
-resource "azurerm_storage_share" "scripts" {
-  name                 = "scripts"
-  storage_account_name = azurerm_storage_account.st.name
-  quota                = 5
-}
-
-resource "azurerm_storage_share" "rcon" {
-  name                 = "rcon"
-  storage_account_name = azurerm_storage_account.st.name
-  quota                = 5
-}
-
-resource "azurerm_storage_share" "java" {
-  name                 = "java"
-  storage_account_name = azurerm_storage_account.st.name
-  quota                = 5
-}
-
-resource "azurerm_storage_share_file" "scripts" {
-  for_each = fileset(path.module, "scripts/*")
-
-  name             = replace(each.key, "scripts/", "")
-  storage_share_id = azurerm_storage_share.scripts.id
-  source           = each.key
+resource "azurerm_storage_share_file" "ops" {
+  name             = "ops.json"
+  storage_share_id = azurerm_storage_share.share.id
+  source           = "./ops.json"
 }
 
 resource "azurerm_storage_container" "container" {
@@ -179,33 +144,6 @@ resource "azurerm_container_app_environment_storage" "data" {
   share_name                   = azurerm_storage_share.share.name
   access_key                   = azurerm_storage_account.st.primary_access_key
   access_mode                  = "ReadWrite"
-}
-
-resource "azurerm_container_app_environment_storage" "rcon" {
-  name                         = "rcon"
-  container_app_environment_id = azurerm_container_app_environment.cae.id
-  account_name                 = azurerm_storage_account.st.name
-  share_name                   = azurerm_storage_share.rcon.name
-  access_key                   = azurerm_storage_account.st.primary_access_key
-  access_mode                  = "ReadWrite"
-}
-
-resource "azurerm_container_app_environment_storage" "java" {
-  name                         = "java"
-  container_app_environment_id = azurerm_container_app_environment.cae.id
-  account_name                 = azurerm_storage_account.st.name
-  share_name                   = azurerm_storage_share.java.name
-  access_key                   = azurerm_storage_account.st.primary_access_key
-  access_mode                  = "ReadWrite"
-}
-
-resource "azurerm_container_app_environment_storage" "scripts" {
-  name                         = "scripts"
-  container_app_environment_id = azurerm_container_app_environment.cae.id
-  account_name                 = azurerm_storage_account.st.name
-  share_name                   = azurerm_storage_share.scripts.name
-  access_key                   = azurerm_storage_account.st.primary_access_key
-  access_mode                  = "ReadOnly"
 }
 
 resource "azurerm_container_app_environment_dapr_component" "secret" {

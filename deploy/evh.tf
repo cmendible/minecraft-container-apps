@@ -30,7 +30,7 @@ resource "azurerm_eventhub" "temperature" {
 }
 
 resource "azurerm_eventhub" "tnt" {
-  name                = var.evh_tnt_name
+  name                = "tnt"
   namespace_name      = azurerm_eventhub_namespace.evh.name
   resource_group_name = azurerm_resource_group.rg.name
   partition_count     = 2
@@ -48,6 +48,13 @@ resource "azurerm_eventhub_consumer_group" "bot" {
   name                = "minecraft-bot"
   namespace_name      = azurerm_eventhub_namespace.evh.name
   eventhub_name       = azurerm_eventhub.temperature.name
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_eventhub_consumer_group" "bot_tnt" {
+  name                = "minecraft-bot"
+  namespace_name      = azurerm_eventhub_namespace.evh.name
+  eventhub_name       = azurerm_eventhub.tnt.name
   resource_group_name = azurerm_resource_group.rg.name
 }
 

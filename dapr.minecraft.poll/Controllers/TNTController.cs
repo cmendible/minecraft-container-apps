@@ -10,7 +10,7 @@ namespace dapr.minecraft.poll.Controllers;
 
 public class TNTController : Controller
 {
-    
+
     private readonly ILogger<TNTController> _logger;
     private readonly DaprClient _daprClient;
 
@@ -20,8 +20,11 @@ public class TNTController : Controller
         _daprClient = daprClient;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        var message = new TNTMessage() { TNTCount = 1 };
+        var eventData = JsonSerializer.Serialize(message);
+        await _daprClient.PublishEventAsync("messagebus", "tnt", eventData);
         return View();
     }
 
@@ -52,5 +55,5 @@ public class TNTController : Controller
         public int TNTCount { get; set; }
     }
 
-    
+
 }

@@ -8,7 +8,7 @@ export AZURE_OPENAI_API_KEY="<key>"
 export AZURE_OPENAI_DEPLOYMENT="gpt-35-turbo"
 node main.ts
 
-docker build -t cmendibl3/minecraft-bot .
-docker push cmendibl3/minecraft-bot 
+docker build -t cmendibl3/minecraft-bot:0.1.0 .
+docker push cmendibl3/minecraft-bot:0.1.0 
 
 dapr run -a bot -p 8080 --components-path ..\components\ -- node main.ts
