@@ -1,3 +1,4 @@
+const axios = require('axios');
 // https://github.com/PrismarineJS/mineflayer
 
 const mineflayer = require("mineflayer");
@@ -86,6 +87,19 @@ bot.once("spawn", () => {
       case "stop":
         console.log(`stop action`);
         bot.pathfinder.setGoal(null);
+        break;
+      case "read temperature":
+        console.log(`read temperature action`);
+        bot.chat("Reading temperature for sensor 1...");
+        axios
+          .get("http://localhost:3500/v1.0/invoke/dapr-sensors-average/method/average/1", {
+            responseType: "json",
+          })
+          .then(function (response) {
+            let temp = response.data.temperature;
+            console.log(temp);
+            bot.chat("Temperature is " + temp + " degrees");
+          });
         break;
       default:
         if (message.startsWith("?")) {
