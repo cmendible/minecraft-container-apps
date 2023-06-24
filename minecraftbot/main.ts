@@ -6,10 +6,8 @@ const minecraftData = require('minecraft-data')
 const vec3 = require('vec3')
 const { mineflayer: mineflayerViewer } = require("prismarine-viewer");
 const { pathfinder, Movements } = require("mineflayer-pathfinder");
-const { GoalNear, GoalBlock, GoalXZ, GoalY, GoalInvert, GoalFollow } =
-  require("mineflayer-pathfinder").goals;
-
-const mcData = minecraftData('1.17')
+const { GoalNear, GoalBlock, GoalXZ, GoalY, GoalInvert, GoalFollow } = require("mineflayer-pathfinder").goals;
+const mcData = require("minecraft-data")(bot.version)
 
 // Azure Open AI module
 const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
@@ -23,15 +21,13 @@ const bot = mineflayer.createBot({
   host: process.env.MINECRAFT_HOST, // optional ('51.105.170.25')
   port: process.env.MINECRAFT_PORT, // optional (25565)
   username: process.env.MINECRAFT_BOT_NAME,
-  //   password: 'minecraft',          // online-mode=true servers
-  //   version: false                 // false corresponds to auto version detection (that's the default), put for example "1.8.8" if you need a specific version
 });
 
 bot.loadPlugin(pathfinder);
 
 bot.once("spawn", () => {
   // Once we've spawn, it is safe to access mcData because we know the version
-  const mcData = require("minecraft-data")(bot.version);
+  ;
 
   // We create different movement generators for different type of activity
   const defaultMove = new Movements(bot, mcData);
@@ -41,8 +37,7 @@ bot.once("spawn", () => {
   bot.on("path_update", (r) => {
     const nodesPerTick = ((r.visitedNodes * 50) / r.time).toFixed(2);
     console.log(
-      `I can get there in ${
-        r.path.length
+      `I can get there in ${r.path.length
       } moves. Computation took ${r.time.toFixed(
         2
       )} ms (${nodesPerTick} nodes/tick).`
@@ -101,9 +96,24 @@ bot.once("spawn", () => {
             bot.chat("Temperature is " + temp + " degrees");
           });
         break;
+      case "equip":
+        equipTnt()
+          .then(() => { });
+        break;
+      case "check inventory":
+        const output = bot.inventory.items().map(itemToString).join(', ')
+        if (output) {
+          bot.chat(output)
+        } else {
+          bot.chat('empty')
+        }
+        break;
+      case "tnt":
+        build();
+        break;
       default:
         if (message.startsWith("?")) {
-          console.log(`chatgpt action`);          
+          console.log(`chatgpt action`);
           let prompt = message.replace("?", "");
 
           console.log(`prompt: ${prompt}`);
@@ -182,48 +192,41 @@ function goTo(bot, cmd, defaultMove) {
 }
 
 function build() {
+  bot.deactivateItem();
+
+  equipTnt();
+
   const referenceBlock = bot.blockAt(bot.entity.position.offset(0, -1, 0))
   const jumpY = Math.floor(bot.entity.position.y) + 1.0
   bot.setControlState('jump', true)
   bot.on('move', placeIfHighEnough)
 
-  let tryCount = 0
-
-  async function placeIfHighEnough () {
+  async function placeIfHighEnough() {
     if (bot.entity.position.y > jumpY) {
       try {
-        await bot.placeBlock(referenceBlock, vec3(0, 1, 0))
         bot.setControlState('jump', false)
         bot.removeListener('move', placeIfHighEnough)
-        bot.chat('Placing a block was successful')
+        await bot.placeBlock(referenceBlock, vec3(0, 1, 0))
+        console.log('Placing a block was successful')
       } catch (err) {
-        tryCount++
-        if (tryCount > 10) {
-          bot.chat(err.message)
-          bot.setControlState('jump', false)
-          bot.removeListener('move', placeIfHighEnough)
-        }
+        bot.setControlState('jump', false)
+        bot.removeListener('move', placeIfHighEnough)
+        console.log(err.message)
       }
     }
   }
 }
 
-function equiphandtnt() {
+async function equipTnt() {
+  const name = 'tnt'
+  const item = itemByName(name)
+  await bot.equip(item, 'hand', checkIfEquipped)
 
-  bot.on('equipartnt', equiptnt)
-
-  async function equiptnt () {
-    let itemsByName
-    if (bot.supportFeature('itemsAreNotBlocks')) {
-      itemsByName = 'itemsByName'
-    } else if (bot.supportFeature('itemsAreAlsoBlocks')) {
-      itemsByName = 'blocksByName'
-    }
-    try {
-      await bot.equip(bot.registry[itemsByName].tnt.id, 'hand')
-      bot.chat('equipped tnt')
-    } catch (err) {
-      bot.chat(`unable to equip tnt: ${err.message}`)
+  function checkIfEquipped(err) {
+    if (err) {
+      console.log(`cannot equip ${name}: ${err.message}`)
+    } else {
+      console.log(`equipped ${name}`)
     }
   }
 }
@@ -260,10 +263,7 @@ app.get("/dapr/subscribe", (req, res) => {
 app.post("/temperature", (req, res) => {
   try {
     let message = req.body.data;
-    console.log(`Average-message: ${message}`);
     console.log(`Average: ${message.temperature}`);
-    
-    // bot.chat(`Average: what?`);
     res.sendStatus(200);
   } catch (e) {
     console.log(e);
@@ -274,13 +274,8 @@ app.post("/temperature", (req, res) => {
 app.post("/tnt", (req, res) => {
   try {
     let message = req.body.data;
-    console.log(`lasttnt-message: ${message}`);
-    bot.chat(`lasttnt-message: ${message}`);
-
-    bot.deactivateItem();
-    equiphandtnt();
+    console.log(`tnt received: ${message}`);
     build();
-    
     res.sendStatus(200);
   } catch (e) {
     console.log(e);
@@ -289,3 +284,17 @@ app.post("/tnt", (req, res) => {
 });
 
 app.listen(port, () => console.log(`minecraft bot listening on port ${port}`));
+
+function itemByName(name) {
+  const items = bot.inventory.items()
+  if (bot.registry.isNewerOrEqualTo('1.9') && bot.inventory.slots[45]) items.push(bot.inventory.slots[45])
+  return items.filter(item => item.name === name)[0]
+}
+
+function itemToString(item) {
+  if (item) {
+    return `${item.name} x ${item.count}`
+  } else {
+    return '(nothing)'
+  }
+}
