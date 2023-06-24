@@ -7,7 +7,6 @@ const vec3 = require('vec3')
 const { mineflayer: mineflayerViewer } = require("prismarine-viewer");
 const { pathfinder, Movements } = require("mineflayer-pathfinder");
 const { GoalNear, GoalBlock, GoalXZ, GoalY, GoalInvert, GoalFollow } = require("mineflayer-pathfinder").goals;
-const mcData = require("minecraft-data")(bot.version)
 
 // Azure Open AI module
 const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
@@ -27,7 +26,7 @@ bot.loadPlugin(pathfinder);
 
 bot.once("spawn", () => {
   // Once we've spawn, it is safe to access mcData because we know the version
-  ;
+  const mcData = require("minecraft-data")(bot.version);
 
   // We create different movement generators for different type of activity
   const defaultMove = new Movements(bot, mcData);
