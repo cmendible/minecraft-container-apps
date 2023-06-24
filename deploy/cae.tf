@@ -63,7 +63,7 @@ resource "azapi_resource" "minecraft_server" {
               },
               {
                 name  = "OPS_FILE"
-                value = "./ops.json"
+                value = "ops.json"
               },
               {
                 name  = "ENABLE_RCON"

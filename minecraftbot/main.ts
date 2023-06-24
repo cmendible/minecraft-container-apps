@@ -1,9 +1,14 @@
-const axios = require('axios');
 // https://github.com/PrismarineJS/mineflayer
+
 const mineflayer = require("mineflayer");
+const minecraftData = require('minecraft-data')
+const vec3 = require('vec3')
 const { mineflayer: mineflayerViewer } = require("prismarine-viewer");
 const { pathfinder, Movements } = require("mineflayer-pathfinder");
-const { GoalNear, GoalBlock, GoalXZ, GoalY, GoalInvert, GoalFollow } = require("mineflayer-pathfinder").goals;
+const { GoalNear, GoalBlock, GoalXZ, GoalY, GoalInvert, GoalFollow } =
+  require("mineflayer-pathfinder").goals;
+
+const mcData = minecraftData('1.17')
 
 // Azure Open AI module
 const { OpenAIClient, AzureKeyCredential } = require("@azure/openai");
@@ -35,7 +40,8 @@ bot.once("spawn", () => {
   bot.on("path_update", (r) => {
     const nodesPerTick = ((r.visitedNodes * 50) / r.time).toFixed(2);
     console.log(
-      `I can get there in ${r.path.length
+      `I can get there in ${
+        r.path.length
       } moves. Computation took ${r.time.toFixed(
         2
       )} ms (${nodesPerTick} nodes/tick).`
@@ -81,25 +87,9 @@ bot.once("spawn", () => {
         console.log(`stop action`);
         bot.pathfinder.setGoal(null);
         break;
-      case "read temperature":
-        console.log(`read temperature action`);
-        bot.chat("Reading temperature for sensor 1...");
-        axios
-          .get("http://localhost:3500/v1.0/invoke/dapr-sensors-average/method/average/1", {
-            responseType: "json",
-          })
-          .then(function (response) {
-            let temp = response.data.temperature;
-            console.log(temp);
-            bot.chat("Temperature is " + temp + " degrees");
-          });
-        break;
-      case "read items"
-        console.log(`read items action`);
-        sayItems(null);
       default:
         if (message.startsWith("?")) {
-          console.log(`chatgpt action`);
+          console.log(`chatgpt action`);          
           let prompt = message.replace("?", "");
 
           console.log(`prompt: ${prompt}`);
@@ -177,6 +167,53 @@ function goTo(bot, cmd, defaultMove) {
   }
 }
 
+function build() {
+  const referenceBlock = bot.blockAt(bot.entity.position.offset(0, -1, 0))
+  const jumpY = Math.floor(bot.entity.position.y) + 1.0
+  bot.setControlState('jump', true)
+  bot.on('move', placeIfHighEnough)
+
+  let tryCount = 0
+
+  async function placeIfHighEnough () {
+    if (bot.entity.position.y > jumpY) {
+      try {
+        await bot.placeBlock(referenceBlock, vec3(0, 1, 0))
+        bot.setControlState('jump', false)
+        bot.removeListener('move', placeIfHighEnough)
+        bot.chat('Placing a block was successful')
+      } catch (err) {
+        tryCount++
+        if (tryCount > 10) {
+          bot.chat(err.message)
+          bot.setControlState('jump', false)
+          bot.removeListener('move', placeIfHighEnough)
+        }
+      }
+    }
+  }
+}
+
+function equiphandtnt() {
+
+  bot.on('equipartnt', equiptnt)
+
+  async function equiptnt () {
+    let itemsByName
+    if (bot.supportFeature('itemsAreNotBlocks')) {
+      itemsByName = 'itemsByName'
+    } else if (bot.supportFeature('itemsAreAlsoBlocks')) {
+      itemsByName = 'blocksByName'
+    }
+    try {
+      await bot.equip(bot.registry[itemsByName].tnt.id, 'hand')
+      bot.chat('equipped tnt')
+    } catch (err) {
+      bot.chat(`unable to equip tnt: ${err.message}`)
+    }
+  }
+}
+
 // Log errors and kick reasons:
 bot.on("kicked", (reason, loggedIn) => console.log(reason, loggedIn));
 bot.on("error", (err) => console.log(err));
@@ -209,7 +246,10 @@ app.get("/dapr/subscribe", (req, res) => {
 app.post("/temperature", (req, res) => {
   try {
     let message = req.body.data;
+    console.log(`Average-message: ${message}`);
     console.log(`Average: ${message.temperature}`);
+    
+    // bot.chat(`Average: what?`);
     res.sendStatus(200);
   } catch (e) {
     console.log(e);
@@ -220,18 +260,13 @@ app.post("/temperature", (req, res) => {
 app.post("/tnt", (req, res) => {
   try {
     let message = req.body.data;
-    console.log(`tnt order received...`);
-    bot.chat(`tnt order received...`);
+    console.log(`lasttnt-message: ${message}`);
+    bot.chat(`lasttnt-message: ${message}`);
 
-    // Create TNT Block
-    const tnt = bot.findBlock({ point: bot.entity.position, matching: "minecraft:tnt" });
-    if (tnt == null) {
-      return;
-    }
-    var Vec3 = require('vec3').Vec3;
-    bot.placeBlock(tnt, new Vec3(0, -1, 0));
-
-    // bot.chat(`Average: what?`);
+    bot.deactivateItem();
+    equiphandtnt();
+    build();
+    
     res.sendStatus(200);
   } catch (e) {
     console.log(e);
@@ -240,44 +275,3 @@ app.post("/tnt", (req, res) => {
 });
 
 app.listen(port, () => console.log(`minecraft bot listening on port ${port}`));
-
-function itemByName (name) {
-  const items = bot.inventory.items()
-  if (bot.registry.isNewerOrEqualTo('1.9') && bot.inventory.slots[45]) items.push(bot.inventory.slots[45])
-  return items.filter(item => item.name === name)[0]
-}
-
-function sayItems (items = null) {
-  if (!items) {
-    items = bot.inventory.items()
-    if (bot.registry.isNewerOrEqualTo('1.9') && bot.inventory.slots[45]) items.push(bot.inventory.slots[45])
-  }
-  const output = items.map(itemToString).join(', ')
-  if (output) {
-    bot.chat(output)
-  } else {
-    bot.chat('empty')
-  }
-}
-
-async function equipItem (name, destination) {
-  const item = itemByName(name)
-  if (item) {
-    try {
-      await bot.equip(item, destination)
-      bot.chat(`equipped ${name}`)
-    } catch (err) {
-      bot.chat(`cannot equip ${name}: ${err.message}`)
-    }
-  } else {
-    bot.chat(`I have no ${name}`)
-  }
-}
-
-function itemToString (item) {
-  if (item) {
-    return `${item.name} x ${item.count}`
-  } else {
-    return '(nothing)'
-  }
-}
