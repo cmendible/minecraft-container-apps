@@ -22,7 +22,7 @@ public class TNTController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var message = new TNTMessage() { TNTCount = 1 };
+        var message = new TNTMessage() { TNTCount = 1, Block = "TNT" };
         var eventData = JsonSerializer.Serialize(message);
         await _daprClient.PublishEventAsync("messagebus", "tnt", eventData);
         return View();
@@ -53,7 +53,7 @@ public class TNTController : Controller
     public class TNTMessage
     {
         public int TNTCount { get; set; }
+        public string Block { get; set; }
     }
-
-
+    
 }
