@@ -2,8 +2,9 @@ const axios = require('axios');
 // https://github.com/PrismarineJS/mineflayer
 
 const mineflayer = require("mineflayer");
-const minecraftData = require('minecraft-data')
-const vec3 = require('vec3')
+const minecraftData = require('minecraft-data');
+const Item = require('prismarine-item')('1.8')
+const vec3 = require('vec3');
 const { mineflayer: mineflayerViewer } = require("prismarine-viewer");
 const { pathfinder, Movements } = require("mineflayer-pathfinder");
 const { GoalNear, GoalBlock, GoalXZ, GoalY, GoalInvert, GoalFollow } = require("mineflayer-pathfinder").goals;
@@ -190,11 +191,11 @@ function goTo(bot, cmd, defaultMove) {
   }
 }
 
-function build() {
-  bot.deactivateItem();
-
-  equipTnt();
-
+function build(item) {
+  
+  bot.creative.setInventorySlot(36, item);
+  bot.equip(item.type, 'hand');
+  
   const referenceBlock = bot.blockAt(bot.entity.position.offset(0, -1, 0))
   const jumpY = Math.floor(bot.entity.position.y) + 1.0
   bot.setControlState('jump', true)
@@ -274,7 +275,9 @@ app.post("/tnt", (req, res) => {
   try {
     let message = req.body.data;
     console.log(`tnt received: ${message}`);
-    build();
+    const tnt = new Item(48,1);
+    build(tnt);
+    
     res.sendStatus(200);
   } catch (e) {
     console.log(e);
