@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using dapr.minecraft.poll.Models;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using Dapr.Actors.Runtime;
 using Dapr.Client;
 
 namespace dapr.minecraft.poll.Controllers;
@@ -36,6 +34,6 @@ public class TNTController : Controller
     public class TNTMessage
     {
         public int TNTCount { get; set; }
-        public string Block { get; set; }
+        public string Block { get; set; } = string.Empty;
     }
 }

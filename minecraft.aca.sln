@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dapr.sensors.client", "dapr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dapr.sensors.interfaces", "dapr.sensors.interfaces\dapr.sensors.interfaces.csproj", "{E79F1C48-4E74-433C-BE5F-801E16F2E7BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dapr.minecraft.poll", "dapr.minecraft.poll\dapr.minecraft.poll.csproj", "{6A2476E1-F4E7-4B48-BB64-72DB1E866A81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{E79F1C48-4E74-433C-BE5F-801E16F2E7BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E79F1C48-4E74-433C-BE5F-801E16F2E7BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E79F1C48-4E74-433C-BE5F-801E16F2E7BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A2476E1-F4E7-4B48-BB64-72DB1E866A81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A2476E1-F4E7-4B48-BB64-72DB1E866A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A2476E1-F4E7-4B48-BB64-72DB1E866A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A2476E1-F4E7-4B48-BB64-72DB1E866A81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
