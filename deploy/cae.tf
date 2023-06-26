@@ -1,9 +1,25 @@
-resource "azurerm_container_app_environment" "cae" {
-  name                       = local.cae_name
-  location                   = azurerm_resource_group.rg.location
-  resource_group_name        = azurerm_resource_group.rg.name
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.logs.id
-  infrastructure_subnet_id   = azurerm_subnet.apps.id
+resource "azapi_resource" "cae" {
+  name      = local.cae_name
+  location  = azurerm_resource_group.rg.location
+  parent_id = azurerm_resource_group.rg.id
+  type      = "Microsoft.App/managedEnvironments@2022-01-01-preview"
+
+  body = jsonencode({
+    properties : {
+      daprAIInstrumentationKey = "${azurerm_application_insights.appinsights.instrumentation_key}"
+      appLogsConfiguration = {
+        destination = "log-analytics"
+        logAnalyticsConfiguration = {
+          customerId = "${azurerm_log_analytics_workspace.logs.workspace_id}"
+          sharedKey  = "${azurerm_log_analytics_workspace.logs.primary_shared_key}"
+        }
+      }
+      vnetConfiguration = {
+        internal               = false
+        infrastructureSubnetId = "${azurerm_subnet.apps.id}"
+      }
+    }
+  })
 }
 
 resource "azapi_resource" "minecraft_server" {
@@ -20,7 +36,7 @@ resource "azapi_resource" "minecraft_server" {
 
   body = jsonencode({
     properties : {
-      managedEnvironmentId = "${azurerm_container_app_environment.cae.id}"
+      managedEnvironmentId = "${azapi_resource.cae.id}"
       configuration = {
         ingress = {
           external   = true
@@ -139,7 +155,7 @@ resource "azurerm_storage_container" "container" {
 
 resource "azurerm_container_app_environment_storage" "data" {
   name                         = "minecraftstorage"
-  container_app_environment_id = azurerm_container_app_environment.cae.id
+  container_app_environment_id = azapi_resource.cae.id
   account_name                 = azurerm_storage_account.st.name
   share_name                   = azurerm_storage_share.share.name
   access_key                   = azurerm_storage_account.st.primary_access_key
@@ -148,7 +164,7 @@ resource "azurerm_container_app_environment_storage" "data" {
 
 resource "azurerm_container_app_environment_dapr_component" "secret" {
   name                         = "secretstore"
-  container_app_environment_id = azurerm_container_app_environment.cae.id
+  container_app_environment_id = azapi_resource.cae.id
   component_type               = "secretstores.azure.keyvault"
   version                      = "v1"
 
@@ -170,7 +186,7 @@ resource "azurerm_container_app_environment_dapr_component" "secret" {
 
 resource "azurerm_container_app_environment_dapr_component" "state" {
   name                         = "statedb"
-  container_app_environment_id = azurerm_container_app_environment.cae.id
+  container_app_environment_id = azapi_resource.cae.id
   component_type               = "state.azure.cosmosdb"
   version                      = "v1"
 
@@ -207,7 +223,7 @@ resource "azurerm_container_app_environment_dapr_component" "state" {
 
 resource "azurerm_container_app_environment_dapr_component" "messagebus" {
   name                         = "messagebus"
-  container_app_environment_id = azurerm_container_app_environment.cae.id
+  container_app_environment_id = azapi_resource.cae.id
   component_type               = "pubsub.azure.eventhubs"
   version                      = "v1"
 

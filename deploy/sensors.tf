@@ -12,7 +12,7 @@ resource "azapi_resource" "dapr_sensors_actors" {
 
   body = jsonencode({
     properties : {
-      managedEnvironmentId = "${azurerm_container_app_environment.cae.id}"
+      managedEnvironmentId = "${azapi_resource.cae.id}"
       configuration = {
         ingress = {
           external   = false
@@ -66,7 +66,7 @@ resource "azapi_resource" "dapr_sensors_client" {
 
   body = jsonencode({
     properties : {
-      managedEnvironmentId = "${azurerm_container_app_environment.cae.id}"
+      managedEnvironmentId = "${azapi_resource.cae.id}"
       configuration = {
         dapr = {
           enabled = true
@@ -113,7 +113,7 @@ resource "azapi_resource" "dapr_sensors_average" {
 
   body = jsonencode({
     properties : {
-      managedEnvironmentId = "${azurerm_container_app_environment.cae.id}"
+      managedEnvironmentId = "${azapi_resource.cae.id}"
       configuration = {
         ingress = {
           external   = false
@@ -167,7 +167,7 @@ resource "azapi_resource" "dapr_minecraft_poll" {
 
   body = jsonencode({
     properties : {
-      managedEnvironmentId = "${azurerm_container_app_environment.cae.id}"
+      managedEnvironmentId = "${azapi_resource.cae.id}"
       configuration = {
         ingress = {
           external   = true

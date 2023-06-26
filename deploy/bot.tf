@@ -12,7 +12,7 @@ resource "azapi_resource" "minecraft_bot" {
 
   body = jsonencode({
     properties : {
-      managedEnvironmentId = "${azurerm_container_app_environment.cae.id}"
+      managedEnvironmentId = "${azapi_resource.cae.id}"
       configuration = {
         secrets = [
           {
