@@ -15,6 +15,7 @@ locals {
   eventhub_name       = "${var.eventhub_name}-${local.name_sufix}"
   cae_name            = "${var.cae_name}-${local.name_sufix}"
   logws_name          = "${var.logws_name}-${local.name_sufix}"
+  nsg_name            = "nsg-${local.name_sufix}"
 }
 
 # Create Resource Group
