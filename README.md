@@ -14,3 +14,8 @@ terraform apply
 ---
 
 env:DEBUG="minecraft-protocol"  
+
+---
+
+az containerapp revision deactivate --resource-group rg-cae-f51d --revision mc-server--x5gj7s6  --name mc-server
+az containerapp revision activate --resource-group rg-cae-f51d --revision mc-server--x5gj7s6  --name mc-server
