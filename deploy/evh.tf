@@ -58,3 +58,18 @@ resource "azurerm_eventhub_consumer_group" "bot_tnt" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
+resource "azurerm_eventhub_namespace_authorization_rule" "auth" {
+  name                = "DaprListenSend"
+  namespace_name      = azurerm_eventhub_namespace.evh.name
+  resource_group_name = azurerm_resource_group.rg.name
+
+  listen = true
+  send   = true
+  manage = false
+}
+
+resource "azurerm_key_vault_secret" "evh_connection_string" {
+  name         = "evh-connection-string"
+  value        = azurerm_eventhub_namespace_authorization_rule.auth.primary_connection_string
+  key_vault_id = azurerm_key_vault.kv.id
+}

@@ -32,3 +32,9 @@ resource "azurerm_cosmosdb_sql_container" "container" {
   partition_key_version = 1
   throughput            = 400
 }
+
+resource "azurerm_key_vault_secret" "cosmosdb_master_key" {
+  name         = "cosmosdb-master-key"
+  value        = azurerm_cosmosdb_account.db.primary_key
+  key_vault_id = azurerm_key_vault.kv.id
+}
