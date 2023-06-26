@@ -19,7 +19,6 @@ public class TNTController : Controller
         _logger = logger;
         _daprClient = daprClient;
     }
-
     public async Task<IActionResult> Index()
     {
         var message = new TNTMessage() { TNTCount = 1, Block = "TNT" };
@@ -34,26 +33,9 @@ public class TNTController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    [HttpPost("send-message")]
-    public async Task<IActionResult> SendMessageAsync([FromBody] TNTMessage message)
-    {
-        try
-        {
-            var eventData = JsonSerializer.Serialize(message);
-            await _daprClient.PublishEventAsync("messagebus", "tnt", eventData);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error sending message to Event Hub");
-            return StatusCode(500);
-        }
-    }
-
     public class TNTMessage
     {
         public int TNTCount { get; set; }
         public string Block { get; set; }
     }
-    
 }
