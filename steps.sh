@@ -28,7 +28,7 @@ export AZURE_OPENAI_ENDPOINT=$(az cognitiveservices account show -n $AZ_OPENAI_N
 export AZURE_OPENAI_API_KEY=$(az cognitiveservices account keys list -n $AZ_OPENAI_NAME -g $RESOURCE_GROUP --query "key1" -o tsv)
 export AZURE_OPENAI_DEPLOYMENT="gpt-35-turbo"
 export MINECRAFT_HOST="localhost"
-export MINECRAFT_BOT_NAME="vicky"
+export MINECRAFT_BOT_NAME="0GiS0"
 export MINECRAFT_PORT=25565
 
 node main.ts

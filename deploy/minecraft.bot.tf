@@ -53,7 +53,7 @@ resource "azapi_resource" "minecraft_bot" {
               },
               {
                 name  = "MINECRAFT_BOT_NAME"
-                value = "vicky"
+                value = "0GiS0"
               },
               {
                 name  = "AZURE_OPENAI_ENDPOINT"
