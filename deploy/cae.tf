@@ -2,7 +2,7 @@ resource "azapi_resource" "cae" {
   name      = local.cae_name
   location  = azurerm_resource_group.rg.location
   parent_id = azurerm_resource_group.rg.id
-  type      = "Microsoft.App/managedEnvironments@2022-01-01-preview"
+  type      = "Microsoft.App/managedEnvironments@2022-11-01-preview"
 
   body = jsonencode({
     properties : {
