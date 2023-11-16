@@ -17,6 +17,12 @@ var apiKey = config.GetSection("Values").GetValue<string>("apiKey");
 var endpoint = config.GetSection("Values").GetValue<string>("endpoint");
 var openaiKey = config.GetSection("Values").GetValue<string>("openaiKey");
 
+// Show model, apiKey, endpoint and openaiKey
+Console.WriteLine($"model: {model}");
+Console.WriteLine($"apiKey: {apiKey}");
+Console.WriteLine($"endpoint: {endpoint}");
+Console.WriteLine($"openaiKey: {openaiKey}");
+
 // Check if model, apiKey, endpoint and openaiKey are set
 if (string.IsNullOrEmpty(model) || string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(openaiKey))
 {
