@@ -27,7 +27,10 @@ resource "azapi_resource" "sk_minimal_api" {
             name  = "azureopenaiapikey"
             value = "${azurerm_cognitive_account.openai.primary_access_key}"
           },
-          
+          {
+            name  = "openaikey"
+            value = "${var.openai_key}}"
+          },
           {
             name  = "acrpassword"
             value = azurerm_container_registry.acr.admin_password
@@ -35,7 +38,7 @@ resource "azapi_resource" "sk_minimal_api" {
         ]
         ingress = {
           external   = true
-          targetPort = 7070
+          targetPort = 8080
           transport  = "Http"
         }
       }
@@ -43,27 +46,27 @@ resource "azapi_resource" "sk_minimal_api" {
         containers = [
           {
             name  = "api"
-            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:2.0"
+            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:4.0"
             resources = {
-              cpu    = 0.5
-              memory = "1Gi"
+              cpu    = 0.75
+              memory = "1.5Gi"
             }
             env = [
               {
-                name  = "Values__model"
+                name  = "model"
                 value = "gpt-4"
               },
               {
-                name  = "Values__apiKey"
-                value = "08f5caec3fb84e18b5b14689c1961fa9"
+                name      = "apiKey"
+                secretRef = "azureopenaiapikey"
               },
               {
-                name  = "Values__endpoint"
-                value = "https://semantic-kernel-models.openai.azure.com/"
+                name  = "endpoint"
+                value = "${azurerm_cognitive_account.openai.endpoint}"
               },
               {
-                name  = "Values__openaiKey"
-                value = "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"
+                name      = "openaiKey"
+                secretRef = "openaikey"
               }
             ],
           },

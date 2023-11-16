@@ -12,6 +12,12 @@ output "minecraft_server_fqdn" {
   value = jsondecode(azapi_resource.minecraft_server.output).properties.configuration.ingress.fqdn
 }
 
+output "sk_minimal_api_fqdn" {
+  value = jsondecode(azapi_resource.sk_minimal_api.output).properties.configuration.ingress.fqdn
+}
+
+
+
 output "openai_endpoint" {
   value = azurerm_cognitive_account.openai.endpoint
 }

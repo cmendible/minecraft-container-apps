@@ -66,6 +66,10 @@ resource "azapi_resource" "minecraft_bot" {
               {
                 name      = "AZURE_OPENAI_API_KEY"
                 secretRef = "azureopenaiapikey"
+              },
+              {
+                name  = "SEMANTIC_KERNEL_ENDPOINT"
+                value = jsondecode(azapi_resource.sk_minimal_api.output).properties.configuration.ingress.fqdn
               }
             ],
           },

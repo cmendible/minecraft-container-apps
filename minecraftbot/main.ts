@@ -119,33 +119,52 @@ bot.once("spawn", () => {
 
           console.log(`prompt: ${prompt}`);
 
-          const messages = [
-            {
-              role: "system",
-              content: "You are a chearful assistant assistant.",
-            },
-            { role: "user", content: prompt },
-          ];
+          // const messages = [
+          //   {
+          //     role: "system",
+          //     content: "You are a chearful assistant assistant.",
+          //   },
+          //   { role: "user", content: prompt },
+          // ];
 
-          const events = await client.listChatCompletions(
-            process.env.AZURE_OPENAI_DEPLOYMENT,
-            messages,
-            { maxTokens: 128 }
-          );
+          // const events = await client.listChatCompletions(
+          //   process.env.AZURE_OPENAI_DEPLOYMENT,
+          //   messages,
+          //   { maxTokens: 128 }
+          // );
 
-          let completeAnswer = "";
+          // let completeAnswer = "";
 
-          for await (const event of events) {
-            for (const choice of event.choices) {
-              console.log(choice.delta?.content);
-              if (choice.delta?.content !== undefined) {
-                completeAnswer += choice.delta?.content;
-              }
-            }
-          }
+          // for await (const event of events) {
+          //   for (const choice of event.choices) {
+          //     console.log(choice.delta?.content);
+          //     if (choice.delta?.content !== undefined) {
+          //       completeAnswer += choice.delta?.content;
+          //     }
+          //   }
+          // }
 
-          console.log(`completeAnswer: ${completeAnswer}`);
-          bot.chat(completeAnswer); // If not the minecraft bot will think you are spamming!
+          // console.log(`completeAnswer: ${completeAnswer}`);
+          // bot.chat(completeAnswer); // If not the minecraft bot will think you are spamming!
+
+          // Call API REST with axios
+          // GET
+          axios.get(`${process.env.SEMANTIC_KERNEL_ENDPOINT}/memory?query=${prompt}`, {
+            responseType: "json",
+          })
+            .then(function (response) {
+              console.log(response.data);
+
+              //concatenate all rederences
+              let references = response.data.references.join(" y ");
+
+              bot.chat(`Según he leído en ${references}, ${response.data.answer}`);
+            })
+            .catch(function (error) {
+              bot.chat(error);
+              console.error(error);
+            });
+
         } else if (message.startsWith("goto")) {
           console.log(`goto action`);
 

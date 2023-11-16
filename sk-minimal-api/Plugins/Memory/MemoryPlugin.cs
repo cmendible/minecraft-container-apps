@@ -24,6 +24,7 @@ public class MemoryKernel
     {
         await memory.ImportTextAsync("Carlos Mendible, Manuel Sánchez y Gisela Torres son los ponentes de esta charla", "charla");
         await memory.ImportTextAsync("Gisela fue MVP en 2010 y 2011 de Windows Azure 🤣", "gisela");
+        await memory.ImportTextAsync("Carlos fue MVP del 2017 al 2021 de Developer Technologies y Azure (es el más viejo) 🤣", "carlos");
         await memory.ImportTextAsync("Manu es el único MVP en esta charla", "manu");
 
     }
@@ -53,7 +54,7 @@ public class MemoryKernel
         return JsonSerializer.Serialize(new { answer = answer.Result, references = answer.RelevantSources.Select(x => x.SourceName) });
     }
 
-    [SKFunction, Description("Responde preguntas sobre la charla y personas que aparecen en esta charla")]
+    [SKFunction, Description("Responde preguntas sobre la charla y personas que imparten en esta charla")]
     public static async Task<string> Charla(string ask)
     {
 

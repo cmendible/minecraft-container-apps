@@ -8,6 +8,7 @@ var app = builder.Build();
 
 var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
                 .Build();
 
@@ -17,16 +18,6 @@ var apiKey = Environment.GetEnvironmentVariable("apiKey") ?? config.GetSection("
 var endpoint = Environment.GetEnvironmentVariable("endpoint") ?? config.GetSection("Values").GetValue<string>("endpoint");
 var openaiKey = Environment.GetEnvironmentVariable("openaiKey") ?? config.GetSection("Values").GetValue<string>("openaiKey");
 
-// var model = config.GetSection("Values").GetValue<string>("model");
-// var apiKey = config.GetSection("Values").GetValue<string>("apiKey");
-// var endpoint = config.GetSection("Values").GetValue<string>("endpoint");
-// var openaiKey = config.GetSection("Values").GetValue<string>("openaiKey");
-
-// Show model, apiKey, endpoint and openaiKey
-Console.WriteLine($"model: {model}");
-Console.WriteLine($"apiKey: {apiKey}");
-Console.WriteLine($"endpoint: {endpoint}");
-Console.WriteLine($"openaiKey: {openaiKey}");
 
 // Check if model, apiKey, endpoint and openaiKey are set
 if (string.IsNullOrEmpty(model) || string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(openaiKey))
@@ -89,13 +80,6 @@ app.MapGet("planner", async (HttpContext context, string query) =>
     Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
 
     return Results.Json(new { answer = result.GetValue<string>() });
-
-
-});
-
-// ChatGPT plugin: https://github.com/microsoft/semantic-kernel-starters/tree/main/sk-csharp-chatgpt-plugin
-app.MapGet("chatgpt_plugin", async (HttpContext context, string query) =>
-{
 
 
 });
