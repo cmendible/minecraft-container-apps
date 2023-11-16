@@ -11,11 +11,16 @@ var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
                 .Build();
 
-// Get model, apiKey, endpoint and openaiKey from appsettings.json
-var model = config.GetSection("Values").GetValue<string>("model");
-var apiKey = config.GetSection("Values").GetValue<string>("apiKey");
-var endpoint = config.GetSection("Values").GetValue<string>("endpoint");
-var openaiKey = config.GetSection("Values").GetValue<string>("openaiKey");
+// Get model, apiKey, endpoint and openaiKey from environment variables or appsettings.json
+var model = Environment.GetEnvironmentVariable("model") ?? config.GetSection("Values").GetValue<string>("model");
+var apiKey = Environment.GetEnvironmentVariable("apiKey") ?? config.GetSection("Values").GetValue<string>("apiKey");
+var apiKey = Environment.GetEnvironmentVariable("endpoint") ?? config.GetSection("Values").GetValue<string>("endpoint");
+var apiKey = Environment.GetEnvironmentVariable("openaiKey") ?? config.GetSection("Values").GetValue<string>("openaiKey");
+
+// var model = config.GetSection("Values").GetValue<string>("model");
+// var apiKey = config.GetSection("Values").GetValue<string>("apiKey");
+// var endpoint = config.GetSection("Values").GetValue<string>("endpoint");
+// var openaiKey = config.GetSection("Values").GetValue<string>("openaiKey");
 
 // Show model, apiKey, endpoint and openaiKey
 Console.WriteLine($"model: {model}");
