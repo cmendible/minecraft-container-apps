@@ -35,3 +35,4 @@ node main.ts
 
 # Run minecraft server on docker
 docker run -p 25565:25565 --name minecraft-server -e EULA=TRUE -e VERSION=1.17.1 -e OPS=cmendibl3,lordvanmanu,vicky,0Gis0 -e ONLINE_MODE=FALSE itzg/minecraft-server:latest
+

@@ -33,7 +33,7 @@ resource "azapi_resource" "sk_minimal_api" {
           },
           {
             name  = "acrpassword"
-            value = azurerm_container_registry.acr.admin_password
+            value = "${azurerm_container_registry.acr.admin_password}"
           }
         ]
         ingress = {
@@ -46,7 +46,7 @@ resource "azapi_resource" "sk_minimal_api" {
         containers = [
           {
             name  = "api"
-            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:4.0"
+            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:3.0"
             resources = {
               cpu    = 0.75
               memory = "1.5Gi"
@@ -54,7 +54,7 @@ resource "azapi_resource" "sk_minimal_api" {
             env = [
               {
                 name  = "model"
-                value = "gpt-4"
+                value = "gpt-35-turbo"
               },
               {
                 name      = "apiKey"
@@ -67,6 +67,10 @@ resource "azapi_resource" "sk_minimal_api" {
               {
                 name      = "openaiKey"
                 secretRef = "openaikey"
+              },
+              {
+                name  = "qdrantHost"
+                value = "${jsondecode(azapi_resource.qdrant.output).properties.configuration.ingress.fqdn}"
               }
             ],
           },
@@ -78,6 +82,6 @@ resource "azapi_resource" "sk_minimal_api" {
       }
     }
   })
-  
-   response_export_values = ["properties.configuration.ingress.fqdn"]  
+
+  response_export_values = ["properties.configuration.ingress.fqdn"]
 }

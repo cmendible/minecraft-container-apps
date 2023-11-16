@@ -29,7 +29,7 @@ resource "azapi_resource" "minecraft_bot" {
           },
           {
             name  = "acrpassword"
-            value = azurerm_container_registry.acr.admin_password
+            value ="${azurerm_container_registry.acr.admin_password}"
           }
         ]
         ingress = {

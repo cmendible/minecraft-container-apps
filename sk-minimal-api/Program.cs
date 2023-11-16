@@ -17,6 +17,7 @@ var model = Environment.GetEnvironmentVariable("model") ?? config.GetSection("Va
 var apiKey = Environment.GetEnvironmentVariable("apiKey") ?? config.GetSection("Values").GetValue<string>("apiKey");
 var endpoint = Environment.GetEnvironmentVariable("endpoint") ?? config.GetSection("Values").GetValue<string>("endpoint");
 var openaiKey = Environment.GetEnvironmentVariable("openaiKey") ?? config.GetSection("Values").GetValue<string>("openaiKey");
+var qdrant = Environment.GetEnvironmentVariable("qdrant") ?? config.GetSection("Values").GetValue<string>("qdrant");
 
 
 // Check if model, apiKey, endpoint and openaiKey are set
