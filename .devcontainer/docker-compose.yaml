@@ -1,0 +1,24 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/dotnet:1-7.0-bullseye
+    volumes:
+      - ../..:/workspaces:cached
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+#   minecraft-server:
+#     image: itzg/minecraft-server:latest
+#     network_mode: "host"
+#     environment:
+#       - EULA=TRUE
+#       - VERSION=1.17.1
+#       - ONLINE_MODE=FALSE
+#       - OPS=cmendibl3,lordvanmanu,vicky,0Gis0
+#     ports:
+#       - 25565
+#     volumes:
+#     - data:/data
+#     stdin_open: true
+#     tty: true
+# volumes:
+#   data: {}
