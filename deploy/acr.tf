@@ -1,5 +1,4 @@
-resource "azurerm_container_registry" "acr" {
-  #   name                = "${replace(random_pet.prefix.id, "-", "")}acr"
+resource "azurerm_container_registry" "acr" {  
   name                = "arc${local.name_sufix}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
@@ -7,8 +6,8 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = true
 }
 
-# Create ACR task - for GH Runner Linux
-resource "azurerm_container_registry_task" "linux_acr_task" {
+# Create ACR task for Minimal Semantic Kernel API
+resource "azurerm_container_registry_task" "sk_api_acr_task" {
   name                  = "generate-sk-minimal-api"
   container_registry_id = azurerm_container_registry.acr.id
 
@@ -17,14 +16,14 @@ resource "azurerm_container_registry_task" "linux_acr_task" {
   }
 
   docker_step {
-    dockerfile_path      = "sk-minimal-api/Dockerfile"
-    context_path         = "https://github.com/0gis0/minecraft-container-apps"
+    dockerfile_path      = "Dockerfile"
+    context_path         = "https://github.com/0gis0/minecraft-container-apps#main:sk-minimal-api"
     context_access_token = var.gh_token
     image_names          = ["sk-minimal-api:1.0"]
   }
 
   provisioner "local-exec" {
     # Execute ACR task
-    command = "az acr task run --registry ${azurerm_container_registry.acr.name} --name ${azurerm_container_registry_task.linux_acr_task.name}"
+    command = "az acr task run --registry ${azurerm_container_registry.acr.name} --name ${azurerm_container_registry_task.sk_api_acr_task.name}"
   }
 }

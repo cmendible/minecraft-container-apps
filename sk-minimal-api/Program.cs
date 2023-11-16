@@ -17,6 +17,13 @@ var apiKey = config.GetSection("Values").GetValue<string>("apiKey");
 var endpoint = config.GetSection("Values").GetValue<string>("endpoint");
 var openaiKey = config.GetSection("Values").GetValue<string>("openaiKey");
 
+// Check if model, apiKey, endpoint and openaiKey are set
+if (string.IsNullOrEmpty(model) || string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(endpoint) || string.IsNullOrEmpty(openaiKey))
+{
+    Console.WriteLine("Please set model, apiKey, endpoint and openaiKey in appsettings.json");
+    return;
+}
+
 
 app.MapGet("/", () => "Welcome to Semantic Kernel!");
 
