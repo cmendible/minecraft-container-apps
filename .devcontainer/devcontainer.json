@@ -1,0 +1,46 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
+{
+	"name": "Minecraft Loves ACA, Dapr and Semantic Kernel",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	// "image": "mcr.microsoft.com/devcontainers/dotnet:1-7.0-bullseye",
+	"dockerComposeFile": "docker-compose.yaml",
+	"service": "app",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/terraform-asdf:2": {},
+		"ghcr.io/dapr/cli/dapr-cli:0": {},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+		"ghcr.io/devcontainers-contrib/features/node-asdf:0": {}
+	},
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [25565],
+	// https://code.visualstudio.com/docs/devcontainers/containers#_publishing-a-port
+	// "portsAttributes": {
+	// 		"25565": {
+	// 			"protocol": "http"
+	// 		}
+	// },
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "docker run -p 25565:25565 --name minecraft-server -e EULA=TRUE -e VERSION=1.17.1 -e OPS=cmendibl3,lordvanmanu,vicky,0Gis0 -e ONLINE_MODE=FALSE itzg/minecraft-server:latest",
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"workbench.colorTheme": "Default Light Modern",
+				"workbench.iconTheme": "mc-dp-icons"
+			},
+			"extensions": [
+				"ms-dotnettools.csdevkit",
+				"ms-azuretools.vscode-docker",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"SuperAnt.mc-dp-icons"
+			]
+		}
+	}
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

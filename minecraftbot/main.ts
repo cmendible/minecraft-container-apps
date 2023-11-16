@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const axios = require('axios');
 // https://github.com/PrismarineJS/mineflayer
 
