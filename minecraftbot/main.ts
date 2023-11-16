@@ -155,10 +155,16 @@ bot.once("spawn", () => {
             .then(function (response) {
               console.log(response.data);
 
-              //concatenate all rederences
-              let references = response.data.references.join(" y ");
+              if (response.data.references.length > 0) {
 
-              bot.chat(`Según he leído en ${references}, ${response.data.answer}`);
+                //concatenate all rederences
+                let references = response.data.references.join(" y ");
+                bot.chat(`Según he leído en ${references}, ${response.data.answer}`);
+              }
+              else{
+                bot.chat(response.data.answer);
+              }
+              
             })
             .catch(function (error) {
               bot.chat(error);
