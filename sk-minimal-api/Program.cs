@@ -14,8 +14,8 @@ var config = new ConfigurationBuilder()
 // Get model, apiKey, endpoint and openaiKey from environment variables or appsettings.json
 var model = Environment.GetEnvironmentVariable("model") ?? config.GetSection("Values").GetValue<string>("model");
 var apiKey = Environment.GetEnvironmentVariable("apiKey") ?? config.GetSection("Values").GetValue<string>("apiKey");
-var apiKey = Environment.GetEnvironmentVariable("endpoint") ?? config.GetSection("Values").GetValue<string>("endpoint");
-var apiKey = Environment.GetEnvironmentVariable("openaiKey") ?? config.GetSection("Values").GetValue<string>("openaiKey");
+var endpoint = Environment.GetEnvironmentVariable("endpoint") ?? config.GetSection("Values").GetValue<string>("endpoint");
+var openaiKey = Environment.GetEnvironmentVariable("openaiKey") ?? config.GetSection("Values").GetValue<string>("openaiKey");
 
 // var model = config.GetSection("Values").GetValue<string>("model");
 // var apiKey = config.GetSection("Values").GetValue<string>("apiKey");
