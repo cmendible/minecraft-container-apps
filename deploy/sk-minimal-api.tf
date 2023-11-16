@@ -46,7 +46,7 @@ resource "azapi_resource" "sk_minimal_api" {
         containers = [
           {
             name  = "api"
-            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:1.2"
+            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:1.3"
             resources = {
               cpu    = 0.75
               memory = "1.5Gi"

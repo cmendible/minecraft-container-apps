@@ -8,7 +8,7 @@ var app = builder.Build();
 
 var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())                
-                .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
 
 // Get model, apiKey, endpoint and openaiKey from environment variables or appsettings.json
