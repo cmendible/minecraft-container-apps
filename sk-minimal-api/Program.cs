@@ -98,7 +98,7 @@ app.MapGet("planner", async (HttpContext context, string query) =>
 *****************************************************************************************/
 
 // First, load some documents... about Minecraft! 😙
-Plugins.MemoryPlugin.MemoryKernel.Init(openaiKey);
+Plugins.MemoryPlugin.MemoryKernel.Init(openaiKey, qdrant);
 
 app.MapGet("memory", async (HttpContext context, string query) =>
 {

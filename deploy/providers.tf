@@ -8,6 +8,14 @@ terraform {
       source = "Azure/azapi"
     }
   }
+
+  cloud {
+    organization = "returngis"
+    workspaces {
+      name = "minecraft-container-apps"
+    }
+  }
+
 }
 
 provider "azurerm" {
