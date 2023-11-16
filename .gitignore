@@ -561,3 +561,4 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+sk-minimal-api/appsettings.Development.json
