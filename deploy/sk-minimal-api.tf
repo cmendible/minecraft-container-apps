@@ -43,7 +43,7 @@ resource "azapi_resource" "sk_minimal_api" {
         containers = [
           {
             name  = "api"
-            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:1.0"
+            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:2.0"
             resources = {
               cpu    = 0.5
               memory = "1Gi"
@@ -63,7 +63,7 @@ resource "azapi_resource" "sk_minimal_api" {
               },
               {
                 name  = "Values__openaiKey"
-                value = "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"
+                value = "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"
               }
             ],
           },
