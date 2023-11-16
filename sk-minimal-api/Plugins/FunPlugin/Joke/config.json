@@ -1,6 +1,6 @@
 {
     "schema": 1,
-    "description": "Generate a funny joke",
+    "description": "Genera un chiste sobre el tema que le indiques",
     "type": "completion",
     "completion": {
       "max_tokens": 1000,
@@ -13,8 +13,8 @@
       "parameters": [
         {
           "name": "input",
-          "description": "Joke subject",
-          "defaultValue": ""
+          "description": "Tema del chiste",
+          "defaultValue": "Minecraft"
         }
       ]
     }

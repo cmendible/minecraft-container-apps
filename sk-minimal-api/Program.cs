@@ -31,7 +31,10 @@ if (string.IsNullOrEmpty(model) || string.IsNullOrEmpty(apiKey) || string.IsNull
 
 app.MapGet("/", () => "Welcome to Semantic Kernel!");
 
-///plugins/FunPlugin/invoke/Joke?query=Tell%20me%20a%20joke
+
+/*****************************************************************************************
+*********************************** Semantic Functions ***********************************
+*****************************************************************************************/
 app.MapPost("plugins/{pluginName}/invoke/{functionName}", async (HttpContext context, string query, string pluginName, string functionName) =>
 {
     try
@@ -59,7 +62,10 @@ app.MapPost("plugins/{pluginName}/invoke/{functionName}", async (HttpContext con
 
 });
 
-// Que Semantic Kernel elija los plugins que considere para contestar a mi pregunta
+
+/*****************************************************************************************
+*********************************** Planner *********************************************
+*****************************************************************************************/
 app.MapGet("planner", async (HttpContext context, string query) =>
 {
     var kernel = new KernelBuilder()
@@ -87,9 +93,11 @@ app.MapGet("planner", async (HttpContext context, string query) =>
 });
 
 
-// Kernel Memory
+/*****************************************************************************************
+*********************************** Kernel Memory ****************************************
+*****************************************************************************************/
 
-// Load documents
+// First, load some documents... about Minecraft! 😙
 Plugins.MemoryPlugin.MemoryKernel.Init(openaiKey);
 
 app.MapGet("memory", async (HttpContext context, string query) =>
@@ -98,6 +106,8 @@ app.MapGet("memory", async (HttpContext context, string query) =>
                     .WithAzureOpenAIChatCompletionService(model, endpoint, apiKey)
                     .Build();
 
+    var pluginsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Plugins");
+    kernel.ImportSemanticFunctionsFromDirectory(pluginsDirectory, "FunPlugin");
     var memoryPlugin = kernel.ImportFunctions(new Plugins.MemoryPlugin.MemoryKernel(), "MemoryPlugin");
 
     var planner = new SequentialPlanner(kernel);
@@ -109,7 +119,16 @@ app.MapGet("memory", async (HttpContext context, string query) =>
 
     var result = await kernel.RunAsync(plan);
 
-    return Results.Json(JsonSerializer.Deserialize<Answer>(result.GetValue<string>()));
+    Console.WriteLine(result);
+
+    try
+    {
+        return Results.Json(JsonSerializer.Deserialize<Answer>(result.GetValue<string>()));
+    }
+    catch (System.Exception)
+    {
+        return Results.Json(new { answer = result.GetValue<string>() });
+    }    
 
 });
 
