@@ -13,7 +13,7 @@ public class MemoryKernel
     public static void Init(string apiKey)
     {
         memory = new KernelMemoryBuilder()
-                          .WithOpenAIDefaults(apiKey)
+                         .WithOpenAIDefaults(apiKey)
                          .BuildServerlessClient();
 
         LoadTextMemories();
@@ -31,14 +31,16 @@ public class MemoryKernel
 
     static async void LoadDocs()
     {
-        await memory.ImportDocumentAsync("docs/Guia completa 2022.pdf", documentId: "doc001", tags: new TagCollection{{"type","games"}});
-        await memory.ImportDocumentAsync("docs/Minecraft_la_guia_definitiva.pdf", documentId: "doc002", tags: new TagCollection{{"type","games"}});
+        // await memory.ImportDocumentAsync("docs/Guia completa 2022.pdf", documentId: "doc001", tags: new TagCollection{{"type","games"}});
+        // await memory.ImportDocumentAsync("docs/Minecraft_la_guia_definitiva.pdf", documentId: "doc002", tags: new TagCollection{{"type","games"}});
+                await memory.ImportDocumentAsync("docs/Guia completa 2022.pdf", documentId: "doc001");
+        await memory.ImportDocumentAsync("docs/Minecraft_la_guia_definitiva.pdf", documentId: "doc002");
     }
 
     [SKFunction, Description("Responde preguntas sobre Minecraft")]
     public static async Task<string> Minecraft(string ask)
     {
-        var answer = await memory.AskAsync(ask, filter: new MemoryFilter().ByTag("type", "games"));
+        var answer = await memory.AskAsync(ask);
 
         // Answer
         Console.WriteLine($"\nAnswer: {answer.Result}");
