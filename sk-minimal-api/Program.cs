@@ -7,8 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 var config = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .SetBasePath(Directory.GetCurrentDirectory())                
                 .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
                 .Build();
 

@@ -27,11 +27,20 @@ public class MemoryKernel
         // await memory.ImportTextAsync("Carlos fue MVP del 2017 al 2021 de Developer Technologies y Azure (es el más viejo) 🤣", documentId:"carlos", tags: new TagCollection{{"type","people"}});
         // await memory.ImportTextAsync("Manu es el único MVP en esta charla", documentId:"manu", tags: new TagCollection{{"type","people"}});
 
-        await memory.ImportTextAsync("Carlos Mendible, Manuel Sánchez y Gisela Torres son los ponentes de esta charla", "charla");
-        await memory.ImportTextAsync("Gisela fue MVP en 2010 y 2011 de Windows Azure 🤣", "gisela");
-        await memory.ImportTextAsync("Carlos fue MVP del 2017 al 2021 de Developer Technologies y Azure (es el más viejo) 🤣","carlos");
-        await memory.ImportTextAsync("Manu es el único MVP en esta charla", documentId:"manu");
+        try
+        {
+            await memory.ImportTextAsync("Carlos Mendible, Manuel Sánchez y Gisela Torres son los ponentes de esta charla", "charla");
+            await memory.ImportTextAsync("Gisela fue MVP en 2010 y 2011 de Windows Azure 🤣", "gisela");
+            await memory.ImportTextAsync("Carlos fue MVP del 2017 al 2021 de Developer Technologies y Azure (es el más viejo) 🤣","carlos");
+            await memory.ImportTextAsync("Manu es el único MVP en esta charla", documentId:"manu");
 
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+       
 
     }
 

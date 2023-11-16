@@ -19,7 +19,7 @@ resource "azurerm_container_registry_task" "sk_api_acr_task" {
     dockerfile_path      = "Dockerfile"
     context_path         = "https://github.com/0gis0/minecraft-container-apps#main:sk-minimal-api"
     context_access_token = var.gh_token
-    image_names          = ["sk-minimal-api:3.0"]
+    image_names          = ["sk-minimal-api:1.2"]
   }
 
   provisioner "local-exec" {
