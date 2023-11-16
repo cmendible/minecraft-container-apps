@@ -37,6 +37,12 @@ resource "azapi_resource" "sk_minimal_api" {
           }
         ]
         ingress = {
+          "corsPolicy" = {
+            allowedOrigins = ["*"]
+            allowedHeaders = ["*"]
+            allowedMethods = ["*"]
+            exposeHeaders  = ["*"]
+          }
           external   = true
           targetPort = 8080
           transport  = "Http"
