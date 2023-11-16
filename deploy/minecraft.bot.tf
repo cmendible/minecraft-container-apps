@@ -1,4 +1,5 @@
 resource "azapi_resource" "minecraft_bot" {
+  depends_on = [ azurerm_container_registry_task.minecraft_bot_task ]
   name      = "minecraft-bot"
   location  = azurerm_resource_group.rg.location
   parent_id = azurerm_resource_group.rg.id
@@ -14,10 +15,21 @@ resource "azapi_resource" "minecraft_bot" {
     properties : {
       managedEnvironmentId = "${azapi_resource.cae.id}"
       configuration = {
+        registries = [
+          {
+            server            = "${azurerm_container_registry.acr.login_server}"
+            username          = "${azurerm_container_registry.acr.admin_username}"
+            passwordSecretRef = "acrpassword"
+          }
+        ]
         secrets = [
           {
             name  = "azureopenaiapikey"
             value = "${azurerm_cognitive_account.openai.primary_access_key}"
+          },
+          {
+            name  = "acrpassword"
+            value = azurerm_container_registry.acr.admin_password
           }
         ]
         ingress = {
@@ -41,7 +53,7 @@ resource "azapi_resource" "minecraft_bot" {
         containers = [
           {
             name  = "minecraft-bot"
-            image = "cmendibl3/minecraft-bot:0.1.0"
+            image = "${azurerm_container_registry.acr.login_server}/minecraft-bot:1.1"
             resources = {
               cpu    = 0.5
               memory = "1Gi"
@@ -69,7 +81,7 @@ resource "azapi_resource" "minecraft_bot" {
               },
               {
                 name  = "SEMANTIC_KERNEL_ENDPOINT"
-                value = jsondecode(azapi_resource.sk_minimal_api.output).properties.configuration.ingress.fqdn
+                value = "https://${jsondecode(azapi_resource.sk_minimal_api.output).properties.configuration.ingress.fqdn}"
               }
             ],
           },

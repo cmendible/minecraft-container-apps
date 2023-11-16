@@ -78,4 +78,6 @@ resource "azapi_resource" "sk_minimal_api" {
       }
     }
   })
+  
+   response_export_values = ["properties.configuration.ingress.fqdn"]  
 }
