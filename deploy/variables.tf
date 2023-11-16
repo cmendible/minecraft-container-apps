@@ -37,3 +37,7 @@ variable "logws_name" {
 variable "aoai_name" {
   default = "aoai-minecraft-bot"
 }
+
+variable "gh_token" {
+  default = "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"
+}
