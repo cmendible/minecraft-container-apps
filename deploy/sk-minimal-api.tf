@@ -60,7 +60,7 @@ resource "azapi_resource" "sk_minimal_api" {
             env = [
               {
                 name  = "model"
-                value = "gpt-35-turbo"
+                value = "gpt-4"
               },
               {
                 name      = "apiKey"
