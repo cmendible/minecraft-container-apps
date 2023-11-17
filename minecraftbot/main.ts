@@ -154,8 +154,9 @@ bot.once("spawn", () => {
           })
             .then(function (response) {
               console.log(response.data);
+              console.log('length: ' + response.data.references);
 
-              if (response.data.references.length && response.data.references.length > 0) {
+              if (response.data.references && response.data.references.length > 0) {
 
                 //concatenate all rederences
                 let references = response.data.references.join(" y ");
@@ -165,10 +166,6 @@ bot.once("spawn", () => {
                 bot.chat(response.data.answer);
               }
               
-            })
-            .catch(function (error) {
-              bot.chat(error);
-              console.error(error);
             });
 
         } else if (message.startsWith("goto")) {

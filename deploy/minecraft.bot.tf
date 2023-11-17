@@ -54,7 +54,7 @@ resource "azapi_resource" "minecraft_bot" {
         containers = [
           {
             name  = "minecraft-bot"
-            image = "${azurerm_container_registry.acr.login_server}/minecraft-bot:1.1"
+            image = "${azurerm_container_registry.acr.login_server}/minecraft-bot:1.3"
             resources = {
               cpu    = 0.5
               memory = "1Gi"

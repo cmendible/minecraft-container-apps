@@ -43,7 +43,7 @@ resource "azurerm_container_registry_task" "minecraft_bot_task" {
     dockerfile_path      = "Dockerfile"
     context_path         = "https://github.com/0gis0/minecraft-container-apps#main:minecraftbot"
     context_access_token = var.gh_token
-    image_names          = ["minecraft-bot:1.1"]
+    image_names          = ["minecraft-bot:1.3"]
   }
 
   provisioner "local-exec" {
