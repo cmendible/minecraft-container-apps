@@ -13,7 +13,7 @@ terraform {
     resource_group_name  = "terraform-stuff"
     storage_account_name = "myiacstates"
     container_name       = "tfstate"
-    key                  = "minecraft-demo.tfstate"
+    key                  = "minecraft-aca-tnt.tfstate"
     
   }
 

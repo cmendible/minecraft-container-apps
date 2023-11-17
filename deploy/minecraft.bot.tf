@@ -25,7 +25,8 @@ resource "azapi_resource" "minecraft_bot" {
         secrets = [
           {
             name  = "azureopenaiapikey"
-            value = "${azurerm_cognitive_account.openai.primary_access_key}"
+            # value = "${azurerm_cognitive_account.openai.primary_access_key}"
+            value = "${var.azure_openai_api_key}"
           },
           {
             name  = "acrpassword"
@@ -69,7 +70,7 @@ resource "azapi_resource" "minecraft_bot" {
               },
               {
                 name  = "AZURE_OPENAI_ENDPOINT"
-                value = "${azurerm_cognitive_account.openai.endpoint}"
+                value = "${var.azure_oai_endpoint}"
               },
               {
                 name  = "AZURE_OPENAI_DEPLOYMENT"

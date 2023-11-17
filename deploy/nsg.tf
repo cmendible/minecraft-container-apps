@@ -1,5 +1,6 @@
 data "http" "current_public_ip" {
-  url = "https://ipinfo.io/ip"
+  # url = "https://ipinfo.io/ip"
+  url = "https://api.ipify.org"
 }
 
 resource "azurerm_network_security_group" "nsg" {

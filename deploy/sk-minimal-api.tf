@@ -25,7 +25,7 @@ resource "azapi_resource" "sk_minimal_api" {
         secrets = [
           {
             name  = "azureopenaiapikey"
-            value = "${azurerm_cognitive_account.openai.primary_access_key}"
+            value = "${var.azure_openai_api_key}"
           },
           {
             name  = "openaikey"
@@ -68,7 +68,7 @@ resource "azapi_resource" "sk_minimal_api" {
               },
               {
                 name  = "endpoint"
-                value = "${azurerm_cognitive_account.openai.endpoint}"
+                value = "https://semantic-kernel-models.openai.azure.com/"
               },
               {
                 name      = "openaiKey"

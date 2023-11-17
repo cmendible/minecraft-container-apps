@@ -38,8 +38,8 @@ public class MemoryKernel
     static async void LoadTextMemories()
     {
         await memory.ImportTextAsync("Carlos Mendible, Manuel Sánchez y Gisela Torres son los ponentes de esta charla", documentId: "charla", tags: new TagCollection { { "type", "people" } });
-        await memory.ImportTextAsync("Gisela fue MVP en 2010 y 2011 de Windows Azure 🤣", documentId: "gisela", tags: new TagCollection { { "type", "people" } });
-        await memory.ImportTextAsync("Carlos fue MVP del 2017 al 2021 de Developer Technologies y Azure (es el más viejo) 🤣", documentId: "carlos", tags: new TagCollection { { "type", "people" } });
+        await memory.ImportTextAsync("Gisela fue MVP en 2010 y 2011 de Windows Azure", documentId: "gisela", tags: new TagCollection { { "type", "people" } });
+        await memory.ImportTextAsync("Carlos fue MVP del 2017 al 2021 de Developer Technologies y Azure (es el más viejo)", documentId: "carlos", tags: new TagCollection { { "type", "people" } });
         await memory.ImportTextAsync("Manu es el único MVP en esta charla", documentId: "manu", tags: new TagCollection { { "type", "people" } });
 
     }

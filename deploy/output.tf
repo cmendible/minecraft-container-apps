@@ -18,11 +18,11 @@ output "sk_minimal_api_fqdn" {
 
 
 
-output "openai_endpoint" {
-  value = azurerm_cognitive_account.openai.endpoint
-}
+# output "openai_endpoint" {
+#   value = azurerm_cognitive_account.openai.endpoint
+# }
 
-output "openai_key" {
-  sensitive = true
-  value     = azurerm_cognitive_account.openai.primary_access_key
-}
+# output "openai_key" {
+#   sensitive = true
+#   value     = azurerm_cognitive_account.openai.primary_access_key
+# }

@@ -44,5 +44,12 @@ variable "gh_token" {
 
 variable "openai_key" {
   sensitive = true
-  nullable = false
+}
+
+variable "azure_openai_api_key" {
+  
+}
+
+variable "azure_oai_endpoint"{
+  default = "https://semantic-kernel-models.openai.azure.com/"
 }
