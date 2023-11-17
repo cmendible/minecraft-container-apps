@@ -52,7 +52,7 @@ resource "azapi_resource" "sk_minimal_api" {
         containers = [
           {
             name  = "api"
-            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:1.7"
+            image = "${azurerm_container_registry.acr.login_server}/sk-minimal-api:1.9"
             resources = {
               cpu    = 2
               memory = "4Gi"
@@ -73,11 +73,11 @@ resource "azapi_resource" "sk_minimal_api" {
               {
                 name      = "openaiKey"
                 secretRef = "openaikey"
-              },
-              {
-                name  = "qdrant"
-                value = "https://${jsondecode(azapi_resource.qdrant.output).properties.configuration.ingress.fqdn}"
               }
+              # {
+              #   name  = "qdrant"
+              #   value = "https://${jsondecode(azapi_resource.qdrant.output).properties.configuration.ingress.fqdn}"
+              # }
             ],
           },
         ]

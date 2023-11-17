@@ -25,6 +25,11 @@
     <None Update="docs\**\*.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+
+     <None Update="Plugins\**\*">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+
   </ItemGroup>
 
 </Project>
