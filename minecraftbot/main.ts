@@ -155,7 +155,7 @@ bot.once("spawn", () => {
             .then(function (response) {
               console.log(response.data);
 
-              if (response.data.references.length > 0) {
+              if (response.data.references.length && response.data.references.length > 0) {
 
                 //concatenate all rederences
                 let references = response.data.references.join(" y ");
