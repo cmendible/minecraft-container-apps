@@ -73,11 +73,11 @@ resource "azapi_resource" "sk_minimal_api" {
               {
                 name      = "openaiKey"
                 secretRef = "openaikey"
+              },
+              {
+                name  = "qdrant"
+                value = "https://${jsondecode(azapi_resource.qdrant.output).properties.configuration.ingress.fqdn}"
               }
-              # {
-              #   name  = "qdrant"
-              #   value = "https://${jsondecode(azapi_resource.qdrant.output).properties.configuration.ingress.fqdn}"
-              # }
             ],
           },
         ]
