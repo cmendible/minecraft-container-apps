@@ -18,4 +18,4 @@ COPY . .
 
 EXPOSE 8080
 EXPOSE 8181
-CMD [ "node", "main.ts" ]
+CMD [ "node", "main.js" ]
