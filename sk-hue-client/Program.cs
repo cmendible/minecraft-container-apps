@@ -12,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using Plugins;
 using Options;
 using System.Configuration;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 // Build the host and configure the services
 HostApplicationBuilder builder = Host.CreateApplicationBuilder();
@@ -55,8 +57,9 @@ async (Message message)  => {
     string promptResponse = string.Empty;
     promptResponse = await sk_hue_client.RunPrompt(kernel, chatCompletionService, message.UserPrompt);
     using var client = new DaprClientBuilder().Build();
-    await client.PublishEventAsync("eventhubs-pubsub", "iot_responses", promptResponse);
-    Console.WriteLine("Outgoing Message Sent : " + promptResponse);
+    var outMessage = new { IoTResponse = promptResponse };
+    await client.PublishEventAsync("eventhubs-pubsub", "iot_responses", JsonSerializer.Serialize(outMessage));
+    Console.WriteLine("Outgoing Message Sent : " + outMessage);
     return Results.Json(message);
 });
 
