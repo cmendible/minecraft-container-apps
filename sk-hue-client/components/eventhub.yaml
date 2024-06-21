@@ -1,0 +1,24 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: eventhubs-pubsub
+spec:
+  type: pubsub.azure.eventhubs
+  version: v1
+  metadata:
+    - name: connectionString
+      secretKeyRef:
+        key: eh-endpoint
+        name: eh-endpoint
+    - name: storageAccountName
+      secretKeyRef:
+        key: sa-key
+        name: sa-key
+    - name: storageAccountKey
+      secretKeyRef:
+        key: sa-key
+        name: sa-key
+    - name: storageContainerName
+      value: messages
+auth:
+  secretStore: secrets
