@@ -4,8 +4,8 @@ locals {
 
 resource "azurerm_storage_account" "sa" {
   name                      = "stfunc${local.func_name}"
-  location                  = var.location
-  resource_group_name       = var.resource_group_name
+  location                  = azurerm_resource_group.rg.location
+  resource_group_name       = azurerm_resource_group.rg.name
   account_tier              = "Standard"
   account_replication_type  = "LRS"
   enable_https_traffic_only = true
@@ -21,9 +21,9 @@ resource "azapi_resource" "ca_function" {
     kind = "functionapp,linux,container,azurecontainerapps"
     properties : {
       language             = "dotnet-isolated"
-      managedEnvironmentId = "${var.azapi_resource.cae.id}"
+      managedEnvironmentId = azapi_resource.cae.id
       siteConfig = {
-        linuxFxVersion = "DOCKER|cmendibl3/aoai-plugin:0.8.0"
+        linuxFxVersion = "DOCKER|${var.weather_plugin_image}"
         appSettings = [
           {
             name  = "AzureWebJobsStorage"

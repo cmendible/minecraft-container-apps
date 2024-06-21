@@ -15,7 +15,7 @@ resource "azurerm_network_security_group" "nsg" {
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_ranges    = ["25565", "443"]
-    source_address_prefixes    = [data.http.current_public_ip.body]
+    source_address_prefixes    = [data.http.current_public_ip.response_body]
     destination_address_prefix = "*"
   }
 }

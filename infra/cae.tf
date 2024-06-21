@@ -18,6 +18,12 @@ resource "azapi_resource" "cae" {
         internal               = false
         infrastructureSubnetId = "${azurerm_subnet.apps.id}"
       }
+      workloadProfiles = [
+        {
+          workloadProfileType = "Consumption"
+          name                = "Consumption"
+        }
+      ]
     }
   }
   response_export_values = ["properties.defaultDomain"]
