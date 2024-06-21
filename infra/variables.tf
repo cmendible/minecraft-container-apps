@@ -39,7 +39,7 @@ variable "aoai_name" {
 }
 
 variable "minecraft_bot_image" {
-  default = "ghcr.io/cmendible/minecraft-container-apps/minecraft-bot:1.0.0-preview.34"
+  default = "ghcr.io/cmendible/minecraft-container-apps/minecraft-bot:1.0.0-preview.41"
 }
 
 variable "weather_plugin_image" {

@@ -616,10 +616,9 @@ class Bot {
     });
 
     await this.daprServer.pubsub.subscribe("eventhubs", "iot_responses", async (response) => {
-      console.log(`Subscriber received: ${JSON.stringify(response)}`)
-      if (response.IotResponse) {
-        this.bot.talk(response.IotResponse);
-      }
+      console.log(`Subscriber received: ${response}`)
+      const res = JSON.parse(response);
+      this.bot.chat(res.IotResponse);
     });
 
     this.daprServer.start();
