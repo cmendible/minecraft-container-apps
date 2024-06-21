@@ -57,7 +57,7 @@ async (Message message)  => {
     string promptResponse = string.Empty;
     promptResponse = await sk_hue_client.RunPrompt(kernel, chatCompletionService, message.UserPrompt);
     using var client = new DaprClientBuilder().Build();
-    var outMessage = new { IoTResponse = promptResponse };
+    var outMessage = new { IotResponse = promptResponse };
     await client.PublishEventAsync("eventhubs-pubsub", "iot_responses", JsonSerializer.Serialize(outMessage));
     Console.WriteLine("Outgoing Message Sent : " + outMessage);
     return Results.Json(message);
