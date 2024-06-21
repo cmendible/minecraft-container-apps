@@ -20,4 +20,5 @@ resource "azapi_resource" "cae" {
       }
     }
   }
+  response_export_values = ["properties.defaultDomain"]
 }

@@ -1,0 +1,21 @@
+{
+    "schema": 1,
+    "description": "Returns the latitude and longitude GPS coordinates of the provided city.",
+    "type": "completion",
+    "completion": {
+      "max_tokens": 256,
+      "temperature": 0,
+      "top_p": 0,
+      "presence_penalty": 0.0,
+      "frequency_penalty": 0.0
+    },
+    "input": {
+      "parameters": [
+        {
+          "name": "input",
+          "description": "The city to get the GPS coordinates for.",
+          "defaultValue": ""
+        }
+      ]
+    }
+  }

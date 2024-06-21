@@ -1,0 +1,17 @@
+{
+    "schemaVersion": "v1",
+    "nameForHuman": "Weather Forecast Plugin",
+    "nameForModel": "WeatherForecas Plugin",
+    "descriptionForModel": "Used to get a weather forecast for a given location.",
+    "descriptionForHuman": "Used to get a weather forecast for a given location.",
+    "auth": {
+        "type": "none"
+    },
+    "api": {
+        "type": "openapi",
+        "url": "{url}/swagger.json"
+    },
+    "logoUrl": "{url}/logo.png",
+    "contactEmail": "support@example.com",
+    "legalInfoUrl": "http://www.example.com/legal"
+}

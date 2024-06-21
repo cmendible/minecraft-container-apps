@@ -42,6 +42,6 @@ variable "minecraft_bot_image" {
   default = "ghcr.io/cmendible/minecraft-container-apps/minecraft-bot:1.0.0-preview.34"
 }
 
-variable "sk_minimal_api_image" {
-  default = "ghcr.io/cmendible/minecraft-container-apps/sk-minimal-api:1.0.0-preview.34"  
+variable "weather_plugin_image" {
+  default = "ghcr.io/cmendible/minecraft-container-apps/weather-plugin:1.0.0-preview.35"
 }
