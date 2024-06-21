@@ -12,8 +12,8 @@ spec:
         name: eh-endpoint
     - name: storageAccountName
       secretKeyRef:
-        key: sa-key
-        name: sa-key
+        key: sa-name
+        name: sa-name
     - name: storageAccountKey
       secretKeyRef:
         key: sa-key
