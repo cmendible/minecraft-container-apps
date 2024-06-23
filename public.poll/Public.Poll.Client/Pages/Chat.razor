@@ -43,7 +43,7 @@
 
         hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
         {
-            var encodedMsg = $"{user}: {message}";
+            var encodedMsg = $"{message}";
             messages.Add(encodedMsg);
             InvokeAsync(StateHasChanged);
         });

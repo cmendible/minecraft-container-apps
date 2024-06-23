@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 WORKDIR /
-COPY ./Public.Poll.Client/ .
+COPY ./Public.Poll.Client/ ./Public.Poll.Client/
 
 WORKDIR /Public.Poll
 COPY ["./Public.Poll/Public.Poll.csproj", "./"]
@@ -13,7 +13,7 @@ RUN dotnet build "./Public.Poll.csproj" -c Release -o /app/build
 FROM build AS publish
 RUN dotnet publish "./Public.Poll.csproj" -c Release -o /app/publish
 
-FROM base AS final
+FROM build AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Public.Poll.dll"]

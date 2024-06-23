@@ -155,7 +155,7 @@ class Bot {
   talk(message) {
     this.bot.chat(message);
     if (this.daprClient) {
-      this.daprClient.pubsub.publish("eventhubs", "chat", this.bot.name + ": " + message);
+      this.daprClient.pubsub.publish("eventhubs", "chat", { message: this.bot.username + ": " + message });
     }
   }
 
@@ -164,7 +164,7 @@ class Bot {
     console.log('user', user);
     console.log('msg', msg);
 
-    this.daprClient.pubsub.publish("eventhubs", "chat", user + ": " + msg);
+    this.daprClient.pubsub.publish("eventhubs", "chat", { message: user + ": " + msg });
 
     switch (msg.toLowerCase()) {
       case 'come':
@@ -231,8 +231,7 @@ class Bot {
         axios.get(url)
           .then(function (response) {
             console.log(response);
-            const res = JSON.parse(response);
-            me.talk(res.response);
+            me.talk(response.data.response);
           })
           .catch(function (error) {
             console.log(error);
@@ -241,6 +240,8 @@ class Bot {
           .finally(function () {
             // always executed
           });
+
+        break;
 
       case 'light':
         console.log(`light action`);
@@ -635,7 +636,8 @@ class Bot {
     });
 
     await this.daprServer.pubsub.subscribe("eventhubs", "votes", async (response) => {
-      console.log(`Votes received: ${response}`)
+      console.log(`Vote received`);
+      console.log(response["Terraform"]);
       // const res = JSON.parse(response);
       // this.bot.chat(res.IotResponse);
     });

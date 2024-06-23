@@ -3,6 +3,7 @@ using Dapr.Client;
 using Microsoft.AspNetCore.ResponseCompression;
 using BlazorSignalRApp.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using System.Text.Json.Serialization;
 using Public.Poll.Client.Pages;
 using Public.Poll.Components;
 
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddDaprClient();
@@ -48,17 +50,21 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Public.Poll.Client._Imports).Assembly);
 
 app.MapHub<ChatHub>("/chathub");
 
-app.MapPost("/message", [Topic("eventhubs", "chat")]
-async (string message) =>
-{
-    Console.WriteLine("Incoming Message Received : " + message);
-    IHubContext<ChatHub> hubContext = app.Services.GetRequiredService<IHubContext<ChatHub>>();
-    await hubContext.Clients.All.SendAsync("ReceiveMessage", "minecraft", message);
-});
+app.MapPost(
+    "/message",
+    [Topic("eventhubs", "chat")] async (GameMessage message) =>
+    {
+        Console.WriteLine("Incoming Message Received : " + message.Message);
+        IHubContext<ChatHub> hubContext = app.Services.GetRequiredService<IHubContext<ChatHub>>();
+        await hubContext.Clients.All.SendAsync("ReceiveMessage", "minecraft", message.Message);
+    });
 
 app.Run();
+
+public record GameMessage([property: JsonPropertyName("message")] string Message);
