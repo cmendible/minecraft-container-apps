@@ -226,15 +226,17 @@ class Bot {
 
       case "weather":
         const url = process.env.WEATHER_API_URL;
+        const me = this
 
         axios.get(url)
           .then(function (response) {
             console.log(response);
-            this.talk(response);
+            const res = JSON.parse(response);
+            me.talk(res.response);
           })
           .catch(function (error) {
             console.log(error);
-            this.talk("Sorry, but I couldn't get the weather for you.");
+            me.talk("Sorry, but I couldn't get the weather for you.");
           })
           .finally(function () {
             // always executed
