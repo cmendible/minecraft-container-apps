@@ -68,6 +68,10 @@ resource "azapi_resource" "minecraft_bot" {
               {
                 name      = "AZURE_OPENAI_API_KEY"
                 secretRef = "azureopenaiapikey"
+              },
+              {
+                name  = "WEATHER_API_URL"
+                value = "https://func-${local.func_name}.${azapi_resource.cae.output.properties.defaultDomain}/api/plugins/forecast?location=Madrid"
               }
             ],
           },

@@ -2,6 +2,7 @@ import dotenv from "dotenv"
 
 dotenv.config();
 
+import axios from "axios";
 import mineflayer from 'mineflayer';
 import { mineflayer as mineflayerViewer } from "prismarine-viewer";
 import pkg from 'mineflayer-pathfinder';
@@ -218,6 +219,22 @@ class Bot {
           this.bot.chat("Temperature is " + temp + " degrees");
         });
         break;
+
+      case "weather":
+        const url = process.env.WEATHER_API_URL;
+
+        axios.get(url)
+          .then(function (response) {
+            console.log(response);
+            this.bot.chat(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+            this.bot.chat("Sorry, but I couldn't get the weather for you.");
+          })
+          .finally(function () {
+            // always executed
+          });
 
       case 'light':
         console.log(`light action`);
