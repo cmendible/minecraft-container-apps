@@ -35,6 +35,36 @@ resource "azurerm_eventhub_consumer_group" "bot" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
+resource "azurerm_eventhub" "votes" {
+  name                = "votes"
+  namespace_name      = azurerm_eventhub_namespace.evh.name
+  resource_group_name = azurerm_resource_group.rg.name
+  partition_count     = 2
+  message_retention   = 1
+}
+
+resource "azurerm_eventhub_consumer_group" "votes_bote" {
+  name                = "minecraft-bot"
+  namespace_name      = azurerm_eventhub_namespace.evh.name
+  eventhub_name       = azurerm_eventhub.votes.name
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_eventhub" "chat" {
+  name                = "chat"
+  namespace_name      = azurerm_eventhub_namespace.evh.name
+  resource_group_name = azurerm_resource_group.rg.name
+  partition_count     = 2
+  message_retention   = 1
+}
+
+resource "azurerm_eventhub_consumer_group" "votes_consumer" {
+  name                = "public-poll"
+  namespace_name      = azurerm_eventhub_namespace.evh.name
+  eventhub_name       = azurerm_eventhub.chat.name
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
 resource "azurerm_eventhub_namespace_authorization_rule" "auth" {
   name                = "DaprListenSend"
   namespace_name      = azurerm_eventhub_namespace.evh.name

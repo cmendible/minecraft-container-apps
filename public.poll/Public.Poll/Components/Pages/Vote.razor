@@ -1,0 +1,108 @@
+﻿@page "/vote"
+@inject DaprClient daprClient
+
+<PageTitle>Vote</PageTitle>
+
+<h1>@errorMessage</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Option</th>
+            <th>Vote</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Terraform Deployment</td>
+            <td>
+                <input type="checkbox" @bind-value="@checkedTerraform" />
+            </td>
+        </tr>
+        <tr>
+            <td>IoT solution</td>
+            <td>
+                <input type="checkbox" @bind-value="@checkedIoT" />
+            </td>
+        </tr>
+        <tr>
+            <td>Minecraft bot</td>
+            <td>
+                <input type="checkbox" @bind-value="@checkedBot" />
+            </td>
+        </tr>
+        <tr>
+            <td>OpenAI plugin</td>
+            <td>
+                <input type="checkbox" @bind-value="@checkedPlugin" />
+            </td>
+        </tr>
+        <tr>
+            <td>Blazor app</td>
+            <td>
+                <input type="checkbox" @bind-value="@checkedBlazor" />
+            </td>
+        </tr>
+        <tr>
+            <td>Dapr</td>
+            <td>
+                <input type="checkbox" @bind-value="@checkedDapr" />
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="DoVote" disabled="@voted">Click me</button>
+
+@code {
+    private string errorMessage = "";
+    private bool voted;
+    private bool checkedTerraform;
+    private bool checkedIoT;
+    private bool checkedBot;
+    private bool checkedPlugin;
+    private bool checkedBlazor;
+    private bool checkedDapr;
+
+    protected override async Task OnInitializedAsync()
+    {
+        voted = false;
+        checkedTerraform = false;
+        checkedIoT = false;
+        checkedBot = false;
+        checkedPlugin = false;
+        checkedBlazor = false;
+        checkedDapr = false;
+    }
+
+    private async void DoVote()
+    {
+        int count = 0;
+        if (checkedTerraform) count++;
+        if (checkedIoT) count++;
+        if (checkedBot) count++;
+        if (checkedPlugin) count++;
+        if (checkedBlazor) count++;
+        if (checkedDapr) count++;
+
+        if (count != 3)
+        {
+            errorMessage = $"You must select exactly 3 options. You have selected {count}.";
+        }
+        else
+        {
+            errorMessage = "Thank you for voting!";
+            Dictionary<string, bool> voteOptions = new Dictionary<string, bool>
+{
+{ "Terraform", checkedTerraform },
+{ "IoT", checkedIoT },
+{ "Minecraft", checkedBot },
+{ "OpenAI", checkedPlugin },
+{ "Blazor", checkedBlazor },
+{ "Dapr", checkedDapr }
+};
+            await daprClient.PublishEventAsync("eventhubs", "votes", voteOptions);
+            voted = true;
+        }
+    }
+}

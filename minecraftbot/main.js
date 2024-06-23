@@ -155,12 +155,15 @@ class Bot {
 
   talk(message) {
     this.bot.chat(message);
+    this.daprClient.pubsub.publish("eventhubs", "chat", this.bot.name + ": " + msg);
   }
 
   chatHandler(user, msg) {
     if (user === this.bot.username) return;
     console.log('user', user);
     console.log('msg', msg);
+
+    this.daprClient.pubsub.publish("eventhubs", "chat", user + ": " + msg);
 
     switch (msg.toLowerCase()) {
       case 'come':
@@ -196,12 +199,12 @@ class Bot {
       }
 
       case 'day': {
-        this.bot.chat('/time set day');
+        this.talk('/time set day');
         break;
       }
 
       case 'clear': {
-        this.bot.chat('/weather clear');
+        this.talk('/weather clear');
         break;
       }
 
@@ -212,11 +215,11 @@ class Bot {
 
       case 'read temperature':
         console.log(`read temperature action`);
-        this.bot.chat("Reading temperature for sensor 1...");
+        this.talk("Reading temperature for sensor 1...");
         this.daprClient.invoker.invoke("dapr-sensors-average", "average/1", HttpMethod.GET).then((response) => {
           let temp = response.data.temperature;
           console.log(temp);
-          this.bot.chat("Temperature is " + temp + " degrees");
+          this.talk("Temperature is " + temp + " degrees");
         });
         break;
 
@@ -226,11 +229,11 @@ class Bot {
         axios.get(url)
           .then(function (response) {
             console.log(response);
-            this.bot.chat(response);
+            this.talk(response);
           })
           .catch(function (error) {
             console.log(error);
-            this.bot.chat("Sorry, but I couldn't get the weather for you.");
+            this.talk("Sorry, but I couldn't get the weather for you.");
           })
           .finally(function () {
             // always executed
@@ -406,23 +409,13 @@ class Bot {
     this.currentTask = 'follow';
     this.memory.targetUsername = username;
     return;
-    const playerEntity = this.bot.players[username]?.entity;
-    if (!playerEntity) {
-      this.talk("I don't see you !");
-      return;
-    }
-    this.talk(`Coming, ${username} !`);
-    const goal = new GoalFollow(playerEntity, 2);
-    this.bot.pathfinder.setGoal(goal, true);
   }
 
   attackPlayer(username) {
     const playerEntity = this.bot.players[username]?.entity;
     if (!playerEntity) {
-      // this.talk("I don't see you !");
       return;
     }
-    // this.talk(`Attacking, ${username} !`);
     this.attackHandler(playerEntity);
   }
 
@@ -633,9 +626,15 @@ class Bot {
     });
 
     await this.daprServer.pubsub.subscribe("eventhubs", "iot_responses", async (response) => {
-      console.log(`Subscriber received: ${response}`)
+      console.log(`IoT sent: ${response}`)
       const res = JSON.parse(response);
-      this.bot.chat(res.IotResponse);
+      this.talk(res.IotResponse);
+    });
+
+    await this.daprServer.pubsub.subscribe("eventhubs", "votes", async (response) => {
+      console.log(`Votes received: ${response}`)
+      // const res = JSON.parse(response);
+      // this.bot.chat(res.IotResponse);
     });
 
     this.daprServer.start();
