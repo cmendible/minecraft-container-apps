@@ -61,18 +61,17 @@ class Bot {
 
   initEvents() {
     this.bot.once('spawn', () => {
-      this.talk('Spawned');
       this.initMovementConfig();
       this.initAutoEatConfig();
       this.bot.armorManager.equipAll();
       this.initAI();
       this.initDapr();
 
-
       mineflayerViewer(this.bot, { port: 8080 });
       this.path = [this.bot.entity.position.clone()];
 
       this.isReady = true;
+      this.talk('Spawned');
     });
 
     this.bot.on('chat', (user, msg) => {
@@ -155,7 +154,9 @@ class Bot {
 
   talk(message) {
     this.bot.chat(message);
-    this.daprClient.pubsub.publish("eventhubs", "chat", this.bot.name + ": " + msg);
+    if (this.daprClient) {
+      this.daprClient.pubsub.publish("eventhubs", "chat", this.bot.name + ": " + message);
+    }
   }
 
   chatHandler(user, msg) {
