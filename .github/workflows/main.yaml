@@ -20,6 +20,7 @@ env:
   REGISTRY: ghcr.io
   BOT_IMAGE_NAME: minecraft-bot
   PLUGIN_IMAGE_NAME: weather-plugin
+  POLL_IMAGE_NAME: public-poll
 
 jobs:
   build:
@@ -91,4 +92,20 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.GITHUB_REPOSITORY_LOWER_CASE }}/${{ env.PLUGIN_IMAGE_NAME }}:${{ env.MINVERVERSIONOVERRIDE }}
           labels: ${{ steps.meta_plugin.outputs.labels }}
+          build-args: MINVERVERSIONOVERRIDE=${{ env.MINVERVERSIONOVERRIDE }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta_poll
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.POLL_IMAGE_NAME }}
+
+      - name: Build and push Docker image for POLL
+        uses: docker/build-push-action@v3
+        with:
+          context: ./public.poll/
+          file: ./public.poll/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.REGISTRY }}/${{ env.GITHUB_REPOSITORY_LOWER_CASE }}/${{ env.POLL_IMAGE_NAME }}:${{ env.MINVERVERSIONOVERRIDE }}
+          labels: ${{ steps.meta_poll.outputs.labels }}
           build-args: MINVERVERSIONOVERRIDE=${{ env.MINVERVERSIONOVERRIDE }}
