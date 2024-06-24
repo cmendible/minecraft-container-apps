@@ -8,7 +8,7 @@ import { mineflayer as mineflayerViewer } from "prismarine-viewer";
 import pkg from 'mineflayer-pathfinder';
 const { pathfinder, Movements, goals } = pkg;
 const { GoalNear, GoalFollow } = goals;
-import { plugin as pvp } from 'mineflayer-pvp';
+import { plugin, plugin as pvp } from 'mineflayer-pvp';
 import { plugin as autoeat } from 'mineflayer-auto-eat';
 import armorManager from 'mineflayer-armor-manager';
 import * as fs from 'fs';
@@ -34,6 +34,14 @@ class Bot {
     this.state = null;
     this.nearbyPlayers = [];
     this.ticks = 0;
+    this.votes = {
+      terraform: 0,
+      iot: 0,
+      bot: 0,
+      plugin: 0,
+      blazor: 0,
+      dapr: 0
+    }
     this.initBot(account);
     let endpoint = process.env.AZURE_OPENAI_ENDPOINT;
     let key = process.env.AZURE_OPENAI_API_KEY;
@@ -240,7 +248,11 @@ class Bot {
           .finally(function () {
             // always executed
           });
+        break;
 
+      case "votes":
+        const msg = `What are the top 3 options, given that the poll result was: Terraform: ${this.votes.terraform}, IoT: ${this.votes.iot}, Bot: ${this.votes.bot}, Plugin: ${this.votes.plugin}, Blazor: ${this.votes.blazor}, Dapr: ${this.votes.dapr}`;
+        this.chatWithAI(user, msg);
         break;
 
       case 'light':
@@ -637,9 +649,24 @@ class Bot {
 
     await this.daprServer.pubsub.subscribe("eventhubs", "votes", async (response) => {
       console.log(`Vote received`);
-      console.log(response["Terraform"]);
-      // const res = JSON.parse(response);
-      // this.bot.chat(res.IotResponse);
+      if (response["Terraform"]) {
+        this.votes.terraform++;
+      }
+      if (response["IoT"]) {
+        this.votes.iot++;
+      }
+      if (response["Minecraft"]) {
+        this.votes.bot++;
+      }
+      if (response["OpenAI"]) {
+        this.votes.plugin++;
+      }
+      if (response["Blazor"]) {
+        this.votes.blazor++;
+      }
+      if (response["Dapr"]) {
+        this.votes.dapr++;
+      }
     });
 
     this.daprServer.start();
