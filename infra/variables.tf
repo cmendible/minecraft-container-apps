@@ -39,13 +39,13 @@ variable "aoai_name" {
 }
 
 variable "minecraft_bot_image" {
-  default = "ghcr.io/cmendible/minecraft-container-apps/minecraft-bot:1.0.0-preview.47"
+  default = "ghcr.io/cmendible/minecraft-container-apps/minecraft-bot:1.0.0-preview.49"
 }
 
 variable "weather_plugin_image" {
-  default = "ghcr.io/cmendible/minecraft-container-apps/weather-plugin:1.0.0-preview.47"
+  default = "ghcr.io/cmendible/minecraft-container-apps/weather-plugin:1.0.0-preview.49"
 }
 
 variable "poll_image" {
-  default = "ghcr.io/cmendible/minecraft-container-apps/public-poll:1.0.0-preview.47"
+  default = "ghcr.io/cmendible/minecraft-container-apps/public-poll:1.0.0-preview.49"
 }
