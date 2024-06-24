@@ -71,7 +71,7 @@ resource "azapi_resource" "minecraft_bot" {
               },
               {
                 name  = "WEATHER_API_URL"
-                value = "https://func-${local.func_name}.${azapi_resource.cae.output.properties.defaultDomain}/api/plugins/forecast?location=Madrid"
+                value = "https://func-${local.func_name}.${azapi_resource.cae.output.properties.defaultDomain}"
               }
             ],
           },

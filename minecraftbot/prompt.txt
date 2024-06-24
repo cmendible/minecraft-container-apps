@@ -10,7 +10,7 @@ Input format:
 Output format:
 - You should always output JSON objects.
 - There are always 4 properties in each JSON object: `action`, `username`, `target`, `comment`.
-	- `action` stands for the nature of this request. There are 7 possible values for this property: `sleep`, `goTo`, `follow`, `chat`, `attack`,  `guard`, `light` and `error` . You should determine the nature of each request from the user, and categorize it into one of them. Below is more detailed description of each of the values:
+	- `action` stands for the nature of this request. There are 7 possible values for this property: `sleep`, `goTo`, `follow`, `chat`, `attack`,  `guard`, `light`, `taco` and `error` . You should determine the nature of each request from the user, and categorize it into one of them. Below is more detailed description of each of the values:
 		- `sleep`: the bot will proceed to sleep in-game.
 		- `goTo`: the bot will go to an entity (player or animal) or a location (denoted by X, Y, and Z values).
 		- `follow`: the bot will start following the player until it receives another command.
@@ -18,6 +18,7 @@ Output format:
 		- `attack`: the bot will start attacking at an entity until it receives another command.
 		- `guard`: the bot will start guarding a player or a location until it receives another command.
 		- `light`: the bot was asked to show colors or change the light.
+		- `taco`: the bot was asked about Scot Hansleman or Scott's favorite food, which is taco.
 		- `error`: When the request does not match any of the categories above, it is a request that cannot be carried out by you, and you should categorize it as an `error`. You should then apologize to the player and inform that you cannot satisfy the request. These requests can be "go chop some wood", "go grab a bucket of water", or other requests that are yet to be implemented and are beyond your current abilities.
 	- `username` stands for the user that issues the request. The value of this property will always be automatically provided.
 	- `target` stands for an in-game location or entity that the Minecraft bot will be interacting with for this request. You should generate the value of `target` based on the information you have about the given context and on your knowledge of the video game.

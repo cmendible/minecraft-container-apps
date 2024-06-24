@@ -222,32 +222,14 @@ class Bot {
         break;
       }
 
-      case 'read temperature':
-        console.log(`read temperature action`);
-        this.talk("Reading temperature for sensor 1...");
-        this.daprClient.invoker.invoke("dapr-sensors-average", "average/1", HttpMethod.GET).then((response) => {
-          let temp = response.data.temperature;
-          console.log(temp);
-          this.talk("Temperature is " + temp + " degrees");
-        });
-        break;
-
       case "weather":
         const url = process.env.WEATHER_API_URL;
         const me = this
 
-        axios.get(url)
-          .then(function (response) {
-            console.log(response);
-            me.talk(response.data.response);
-          })
-          .catch(function (error) {
-            console.log(error);
-            me.talk("Sorry, but I couldn't get the weather for you.");
-          })
-          .finally(function () {
-            // always executed
-          });
+        this.daprClient.invoker.invoke(url, "/api/plugins/forecast?location=Madrid", HttpMethod.GET).then((res) => {
+          console.log(res);
+          me.talk(res.response);
+        });
         break;
 
       case "votes":
@@ -259,15 +241,11 @@ class Bot {
         console.log(`light action`);
         this.iotLights("Turn on a blue light");
         break;
-
-      default:
-        console.log('other chats', user, msg);
-        break;
     }
 
     if (msg.toLowerCase().startsWith("?")) {
       if (msg.toLowerCase().includes('teleported')) return;
-      this.chatWithAI(user, msg);
+      this.chatWithAI(user, msg.substring(1));
     }
   }
 
@@ -417,7 +395,7 @@ class Bot {
 
   iotLights(prompt) {
     console.log(`DEBUG: light command, prompt: ${prompt}`);
-    this.daprClient.pubsub.publish("eventhubs", "bot-commands", { UserPrompt: prompt })
+    this.daprClient.pubsub.publish("eventhubs", "bot-commands", { UserPrompt: prompt, Taco: false })
   }
 
   followPlayer(username) {
@@ -545,7 +523,7 @@ class Bot {
     } = res;
 
     console.log('[chatWithAI] bot response:', responseComment);
-    this.talk(responseComment);
+    if (responseAction !== 'light') this.talk(responseComment);
 
     switch (responseAction) {
       case 'chat': {
@@ -580,8 +558,14 @@ class Bot {
         break;
       }
       case 'light': {
+        this.talk('Wait a moment...')
         this.iotLights(message);
         console.log(`DEBUG: light command, target: ${responseTarget}`);
+        break;
+      }
+      case 'taco': {
+        this.daprClient.pubsub.publish("eventhubs", "bot-commands", { UserPrompt: message, Taco: true })
+        console.log(`DEBUG: taco command, target: ${responseTarget}`);
         break;
       }
       case 'error': {
