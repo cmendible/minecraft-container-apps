@@ -36,7 +36,7 @@ class Bot {
     this.ticks = 0;
     this.votes = {
       terraform: 0,
-      iot: 0,
+      ds: 0,
       bot: 0,
       plugin: 0,
       blazor: 0,
@@ -116,7 +116,7 @@ class Bot {
 
     this.bot.on('spawn', () => {
       if (!this.firstSpawn) {
-        this.talk('Hola dotNET2024...');
+        this.talk('Hola bizzSummit2024...');
       }
     });
 
@@ -233,13 +233,8 @@ class Bot {
         break;
 
       case "votes":
-        const msg = `What are the top 3 options, given that the poll result was: Terraform: ${this.votes.terraform}, IoT: ${this.votes.iot}, Bot: ${this.votes.bot}, Plugin: ${this.votes.plugin}, Blazor: ${this.votes.blazor}, Dapr: ${this.votes.dapr}`;
+        const msg = `What are the top 3 options, given that the poll result was: Terraform: ${this.votes.terraform}, Dynamic Sessions: ${this.votes.ds}, Bot: ${this.votes.bot}, Plugin: ${this.votes.plugin}, Blazor: ${this.votes.blazor}, Dapr: ${this.votes.dapr}`;
         this.chatWithAI(user, msg);
-        break;
-
-      case 'light':
-        console.log(`light action`);
-        this.iotLights("Turn on a blue light");
         break;
     }
 
@@ -393,11 +388,6 @@ class Bot {
     }
   }
 
-  iotLights(prompt) {
-    console.log(`DEBUG: light command, prompt: ${prompt}`);
-    this.daprClient.pubsub.publish("eventhubs", "bot-commands", { UserPrompt: prompt, Taco: false })
-  }
-
   followPlayer(username) {
     this.currentTaskPriority = 0;
     this.currentTask = 'follow';
@@ -523,7 +513,7 @@ class Bot {
     } = res;
 
     console.log('[chatWithAI] bot response:', responseComment);
-    if (responseAction !== 'light') this.talk(responseComment);
+    if (responseAction !== 'runCode') this.talk(responseComment);
 
     switch (responseAction) {
       case 'chat': {
@@ -557,15 +547,10 @@ class Bot {
         console.log(`DEBUG: guard command, target: ${responseTarget}`);
         break;
       }
-      case 'light': {
+      case 'runCode': {
         this.talk('Wait a moment...')
-        this.iotLights(message);
-        console.log(`DEBUG: light command, target: ${responseTarget}`);
-        break;
-      }
-      case 'taco': {
-        this.daprClient.pubsub.publish("eventhubs", "bot-commands", { UserPrompt: message, Taco: true })
-        console.log(`DEBUG: taco command, target: ${responseTarget}`);
+        this.daprClient.pubsub.publish("eventhubs", "bot-commands", { UserPrompt: responseComment })
+        console.log(`DEBUG: runCode command, target: ${responseTarget}`);
         break;
       }
       case 'error': {
@@ -625,10 +610,13 @@ class Bot {
       },
     });
 
-    await this.daprServer.pubsub.subscribe("eventhubs", "iot_responses", async (response) => {
-      console.log(`IoT sent: ${response}`)
-      const res = JSON.parse(response);
-      this.talk(res.IotResponse);
+    await this.daprServer.pubsub.subscribe("eventhubs", "bot-commands", async (response) => {
+      // console.log(`runCode prompt received: ${response.UserPrompt}`)
+
+      this.daprClient.invoker.invoke("code-interpreter", "runcode", HttpMethod.GET).then((res) => {
+        console.log(res);
+        this.talk(res);
+      });
     });
 
     await this.daprServer.pubsub.subscribe("eventhubs", "votes", async (response) => {
@@ -636,8 +624,8 @@ class Bot {
       if (response["Terraform"]) {
         this.votes.terraform++;
       }
-      if (response["IoT"]) {
-        this.votes.iot++;
+      if (response["Code"]) {
+        this.votes.ds++;
       }
       if (response["Minecraft"]) {
         this.votes.bot++;

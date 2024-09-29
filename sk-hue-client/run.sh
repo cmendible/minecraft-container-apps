@@ -1,1 +1,0 @@
-dapr run --app-id iot-consumer --app-port 5000 --dapr-http-port 7000 --resources-path ./components -- dotnet run

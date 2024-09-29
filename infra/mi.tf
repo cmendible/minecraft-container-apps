@@ -11,3 +11,17 @@ resource "azurerm_role_assignment" "reader" {
   role_definition_name = "Reader"
   principal_id         = azurerm_user_assigned_identity.mi.principal_id
 }
+
+// The identity requires both the Azure Container Apps Session Executor and Contributor roles
+resource "azurerm_role_assignment" "session_executor" {
+  scope                = azapi_resource.code_interpreter.id
+  role_definition_name = "Azure ContainerApps Session Executor"
+  principal_id         = azurerm_user_assigned_identity.mi.principal_id
+}
+
+// The identity requires both the Azure Container Apps Session Executor and Contributor roles
+resource "azurerm_role_assignment" "session_contributor" {
+  scope                = azapi_resource.code_interpreter.id
+  role_definition_name = "Contributor"
+  principal_id         = azurerm_user_assigned_identity.mi.principal_id
+}

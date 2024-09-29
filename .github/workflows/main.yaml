@@ -8,6 +8,7 @@ on:
     branches:
       - main
       - dotNET2024
+      - bizzsummit
     tags:
       - v*
   pull_request:
@@ -15,12 +16,13 @@ on:
       - main
       - dotNET2024
   workflow_dispatch:
-    
+
 env:
   REGISTRY: ghcr.io
   BOT_IMAGE_NAME: minecraft-bot
   PLUGIN_IMAGE_NAME: weather-plugin
   POLL_IMAGE_NAME: public-poll
+  CODE_INTERPRETER_IMAGE_NAME: code-interpreter
 
 jobs:
   build:
@@ -33,17 +35,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.x'
+          dotnet-version: "8.x"
           include-prerelease: true
 
       - name: Setup MinVer
         run: |
           dotnet tool install --global minver-cli --version 4.3.0
-          
+
       - name: Calculate Version
         run: |
           echo "MINVERVERSIONOVERRIDE=$($HOME/.dotnet/tools/minver -t v. -m 1.0 -p preview)" >> $GITHUB_ENV
@@ -54,10 +56,10 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
+
       - name: Lower case REPO
         run: |
           echo "GITHUB_REPOSITORY_LOWER_CASE=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
@@ -67,7 +69,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.BOT_IMAGE_NAME }}
-          
+
       - name: Build and push Docker image for MINECRAFT BOT
         uses: docker/build-push-action@v3
         with:
@@ -108,4 +110,20 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ env.REGISTRY }}/${{ env.GITHUB_REPOSITORY_LOWER_CASE }}/${{ env.POLL_IMAGE_NAME }}:${{ env.MINVERVERSIONOVERRIDE }}
           labels: ${{ steps.meta_poll.outputs.labels }}
+          build-args: MINVERVERSIONOVERRIDE=${{ env.MINVERVERSIONOVERRIDE }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta_code
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.CODE_INTERPRETER_IMAGE_NAME }}
+
+      - name: Build and push Docker image for CODE_INTERPRETER
+        uses: docker/build-push-action@v3
+        with:
+          context: ./codeinterpreter/
+          file: ./codeinterpreter/Dockerfile
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.REGISTRY }}/${{ env.GITHUB_REPOSITORY_LOWER_CASE }}/${{ env.CODE_INTERPRETER_IMAGE_NAME }}:${{ env.MINVERVERSIONOVERRIDE }}
+          labels: ${{ steps.meta_code.outputs.labels }}
           build-args: MINVERVERSIONOVERRIDE=${{ env.MINVERVERSIONOVERRIDE }}

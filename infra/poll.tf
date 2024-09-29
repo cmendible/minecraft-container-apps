@@ -18,7 +18,7 @@ resource "azapi_resource" "poll" {
         ingress = {
           external      = true
           targetPort    = 8080
-          transport     = "http"
+          transport     = "Http"
           allowInsecure = true
 
           traffic = [

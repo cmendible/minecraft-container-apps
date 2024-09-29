@@ -7,7 +7,7 @@ variable "managed_identity_name" {
 }
 
 variable "location" {
-  default = "eastus2"
+  default = "northeurope"
 }
 
 variable "keyvault_name" {
@@ -39,13 +39,17 @@ variable "aoai_name" {
 }
 
 variable "minecraft_bot_image" {
-  default = "ghcr.io/cmendible/minecraft-container-apps/minecraft-bot:1.0.0-preview.51"
+  default = "ghcr.io/cmendible/minecraft-container-apps/minecraft-bot:1.0.0-preview.52"
 }
 
 variable "weather_plugin_image" {
-  default = "ghcr.io/cmendible/minecraft-container-apps/weather-plugin:1.0.0-preview.51"
+  default = "ghcr.io/cmendible/minecraft-container-apps/weather-plugin:1.0.0-preview.52"
 }
 
 variable "poll_image" {
-  default = "ghcr.io/cmendible/minecraft-container-apps/public-poll:1.0.0-preview.51"
+  default = "ghcr.io/cmendible/minecraft-container-apps/public-poll:1.0.0-preview.52"
+}
+
+variable "code_interpreter_image" {
+  default = "ghcr.io/cmendible/minecraft-container-apps/code-interpreter:1.0.0-preview.52"
 }

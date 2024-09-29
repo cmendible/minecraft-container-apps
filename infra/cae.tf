@@ -28,3 +28,30 @@ resource "azapi_resource" "cae" {
   }
   response_export_values = ["properties.defaultDomain"]
 }
+
+resource "azapi_resource" "code_interpreter" {
+  schema_validation_enabled = false // This is required for the resource to be created
+  type                      = "Microsoft.App/sessionPools@2024-02-02-preview"
+  name                      = "code-interpreter"
+  location                  = azurerm_resource_group.rg.location
+  parent_id                 = azurerm_resource_group.rg.id
+  body = {
+    properties = {
+      containerType = "PythonLTS"
+      dynamicPoolConfiguration = {
+        cooldownPeriodInSeconds = 300
+        executionType           = "Timed"
+      }
+      environmentId      = azapi_resource.cae.id
+      poolManagementType = "Dynamic"
+      scaleConfiguration = {
+        maxConcurrentSessions = 10
+        readySessionInstances = 1
+      }
+      sessionNetworkConfiguration = {
+        status = "EgressDisabled"
+      }
+    }
+  }
+  response_export_values = ["properties.poolManagementEndpoint"]
+}

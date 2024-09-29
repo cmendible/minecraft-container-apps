@@ -3,7 +3,7 @@ locals {
 }
 
 resource "azurerm_storage_account" "sa" {
-  name                      = "stfunc${local.func_name}"
+  name                      = "stplugin${local.name_sufix}"
   location                  = azurerm_resource_group.rg.location
   resource_group_name       = azurerm_resource_group.rg.name
   account_tier              = "Standard"
