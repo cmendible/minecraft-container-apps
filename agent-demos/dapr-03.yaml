@@ -1,0 +1,23 @@
+version: 1
+common:
+  resourcesPath: ./components/
+  logLevel: debug
+apps:
+  - appID: customer
+    appDirPath: ./03-agents-conversation/customer
+    command: ["python3", "app.py"]
+
+  - appID: storekeeper
+    appDirPath: ./03-agents-conversation/storekeeper
+    command: ["python3", "app.py"]
+
+  - appID: workflow
+    appDirPath: ./03-agents-conversation/workflow
+    command: ["python3", "app.py"]
+    appPort: 8004
+
+  - appID: client
+    appDirPath: ./03-agents-conversation/client
+    command: ["python3", "client.py"]
+    appPort: 6004
+

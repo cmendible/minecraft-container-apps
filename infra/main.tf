@@ -10,9 +10,6 @@ locals {
   name_sufix          = substr(lower(random_id.random.hex), 1, 4)
   resource_group_name = "${var.resource_group_name}-${local.name_sufix}"
   storage_name        = "${var.storage_name}${local.name_sufix}"
-  keyvault_name       = "${var.keyvault_name}-${local.name_sufix}"
-  cosmosdb_name       = "${var.cosmos_name}-${local.name_sufix}"
-  eventhub_name       = "${var.eventhub_name}-${local.name_sufix}"
   cae_name            = "${var.cae_name}-${local.name_sufix}"
   logws_name          = "${var.logws_name}-${local.name_sufix}"
   nsg_name            = "nsg-${local.name_sufix}"

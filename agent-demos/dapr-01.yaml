@@ -1,0 +1,8 @@
+version: 1
+common:
+  resourcesPath: ./components/
+  logLevel: debug
+apps:
+  - appID: conversation
+    appDirPath: ./01-agent-tool
+    command: ["python3", "app.py"]

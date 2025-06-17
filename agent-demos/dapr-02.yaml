@@ -1,0 +1,8 @@
+version: 1
+common:
+  resourcesPath: ./components/
+  logLevel: debug
+apps:
+  - appID: client
+    appDirPath: ./02-agentic-workflow/
+    command: ["python3", "app.py"]

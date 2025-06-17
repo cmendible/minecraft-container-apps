@@ -6,6 +6,8 @@ provider "registry.terraform.io/azure/azapi" {
   constraints = "1.13.1"
   hashes = [
     "h1:Q10vF78s0i71/CfRYbeoRLAWuJrat2kxIrHK9/yaEYk=",
+    "h1:l6sI11YTFkGxAB2HnLSi3u1TGscOO34BFuEg2TJUZHQ=",
+    "h1:xDZG4lbtQJeyJa3Gzo8qecYxyw+AIXYcdDRlkaSLNz8=",
     "zh:1f2aceddd67ceeb82a75c2f15dc01e54781e9aed5968507dbc29590c165b2e2b",
     "zh:397f0bfbac899d48e23cecf38d362c27562150aa20b19157b5bd370b8e6801ee",
     "zh:652263b7d00623684e29ef7b8ff285a17c5bd7cc8ba7d22967c66d0b3a3c568a",
@@ -26,6 +28,8 @@ provider "registry.terraform.io/hashicorp/azurerm" {
   constraints = "3.105.0"
   hashes = [
     "h1:MK83TecMdabDD+HjbxdTt3emXp8G6djLj7KvvUGstM0=",
+    "h1:tEDW5rEALglcH1JRy31z6AzDULECYrAZOD24B4mqry8=",
+    "h1:zWkzhP2fx0WQIAUp6Amk/We3WNcbtiWagpKF5PJP5+M=",
     "zh:2f81bca6a3bf3d37604bf99fdb2c77d6118520aa379ab65fd28e6b76bed399cd",
     "zh:3578eb79d175af9544b0dc543124d551c0fed4c48f51773ee17e1dc62e22833a",
     "zh:377dbb56caea3fa1e6a6599193b55c8594204c40c054fc2ace4f576fdfe750a2",
@@ -44,7 +48,9 @@ provider "registry.terraform.io/hashicorp/azurerm" {
 provider "registry.terraform.io/hashicorp/http" {
   version = "3.4.2"
   hashes = [
+    "h1:Te941FhpXymGvOraU9IQiMrvDVCMAF4gwjvyVZuvRtk=",
     "h1:YxJewcIIT5sF2h8N+F7eZMsdEimpDpveAOzq/RUiUEo=",
+    "h1:eqo0hkFNrixeaT93PC5NiU893s7rUwwOMeqnCjjj3u0=",
     "zh:0ba051c9c8659ce0fec94a3d50926745f11759509c4d6de0ad5f5eb289f0edd9",
     "zh:23e6760e8406fef645913bf47bfab1ca984c1c5805d2bb0ef8310b16913d29cd",
     "zh:3c69fde4548bfe65b968534c4df8d699648c921d6a065b97fec5faece73a442b",
@@ -64,6 +70,8 @@ provider "registry.terraform.io/hashicorp/random" {
   version = "3.6.2"
   hashes = [
     "h1:5lstwe/L8AZS/CP0lil2nPvmbbjAu8kCaU/ogSGNbxk=",
+    "h1:UQlmHGddu39vVzG8kruMsde4GHlG+1S7OLqFApbJvtc=",
+    "h1:wmG0QFjQ2OfyPy6BB7mQ57WtoZZGGV07uAPQeDmIrAE=",
     "zh:0ef01a4f81147b32c1bea3429974d4d104bbc4be2ba3cfa667031a8183ef88ec",
     "zh:1bcd2d8161e89e39886119965ef0f37fcce2da9c1aca34263dd3002ba05fcb53",
     "zh:37c75d15e9514556a5f4ed02e1548aaa95c0ecd6ff9af1119ac905144c70c114",

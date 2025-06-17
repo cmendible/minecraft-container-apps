@@ -29,7 +29,7 @@ resource "azapi_resource" "minecraft_server" {
           ]
         }
         dapr = {
-          enabled = true
+          enabled = false
           appId   = "mc"
         }
       }
@@ -73,7 +73,7 @@ resource "azapi_resource" "minecraft_server" {
               },
               {
                 name  = "VERSION"
-                value = "1.20.4"
+                value = "1.21.4"
               },
               {
                 name  = "MODE"

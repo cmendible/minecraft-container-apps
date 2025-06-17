@@ -1,69 +1,60 @@
+## Deploy the Azure infrastructure
 
-
-
-
-docker build -t cmendibl3/dapr.sensors.actors:0.1.0 -f .\dapr.actors.Dockerfile .
-docker build -t cmendibl3/dapr.sensors.client:0.1.0 -f .\dapr.client.Dockerfile .
-docker build -t cmendibl3/dapr.sensors.average:0.1.0 -f .\dapr.sensors.average.Dockerfile .
-docker build -t cmendibl3/dapr.minecraft.poll:0.1.0 -f .\dapr.minecraft.poll.Dockerfile .
-
-
-docker push cmendibl3/dapr.sensors.actors:0.1.0
-docker push cmendibl3/dapr.sensors.client:0.1.0
-docker push cmendibl3/dapr.sensors.average:0.1.0
-docker push cmendibl3/dapr.minecraft.poll:0.1.0
-
+```bash
+cd infra
+export ARM_SUBSCRIPTION_ID="<your-azure-subscription-id>"
 terraform apply
-
----
-
-env:DEBUG="minecraft-protocol"  
-
----
-
-az containerapp revision deactivate --resource-group rg-cae-f51d --revision mc-server--x5gj7s6  --name mc-server
-az containerapp revision activate --resource-group rg-cae-f51d --revision mc-server--x5gj7s6  --name mc-server
-
-# Install Minecraft client to access the server
-
-1. Download from https://www.minecraft.net/en-us/download
-
-2. Login with your Microsoft account
-
-3. Create a new installation with version **release 1.17.1**
-
-4. Launch the installation and select the **Multiplayer** 
-
-5. Click on **Direct Connection** and add **localhost:25565**
-
-6. Your server is now running!
-
-<img src="images/Minecraft server up and running.png">
-
-# Join bot to the server
-
-1. Go to **minecraftbot** folder
-
-```bash
-cd minecraftbot
 ```
 
-2. Run **npm install**
+## Prepare the environment
 
 ```bash
+cd agent-demos
+dapr init
+pip install dapr-agents
+pip install -r requirements.txt
+```
+
+## Create a .env file with the following content:
+
+```bash
+AZURE_OPENAI_API_KEY="<your-azure-openai-api-key>"
+AZURE_OPENAI_ENDPOINT="<your-azure-openai-endpoint>"
+AZURE_OPENAI_DEPLOYMENT="gpt-4.1"
+AZURE_OPENAI_API_VERSION="2024-12-01-preview"
+DAPR_LLM_COMPONENT_DEFAULT="openai"
+MINECRAFT_SERVER="<your-minecraft-server>"
+```
+
+## Run the demos
+
+```bash
+dapr run -f dapr-01.yaml
+dapr run -f dapr-02.yaml
+dapr run -f dapr-03.yaml
+```
+
+## Prepare the minecraft mcp server
+
+```bash
+cd minecraft-mcp-server
 npm install
+npm run build
 ```
 
-3. Now **npm start** to start the bot
+## Run the minecraft demo
 
 ```bash
-npm start
+dapr run -f dapr-04.yaml
 ```
 
-4. Press 'T' to open the chat and type **come** to ask the bot to come to your position
+## Enable Redis Insights
 
-<img src="images/Minecraft you and your bot in the same server.png">
+```bash
+docker run --rm -d --name redisinsight -p 5540:5540 redis/redisinsight:latest
+```
 
-5. To talk with ChatGPT use **?** before your message
+### Connection Configuration:
 
-<img src="images/Minecrat_bot_use_chatgpt.png">
+* Port: 6379
+* Host (Linux): 172.17.0.1

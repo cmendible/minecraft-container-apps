@@ -1,0 +1,12 @@
+version: 1
+common:
+  resourcesPath: ./components/
+  logLevel: debug
+  appLogDestination: console
+  daprdLogDestination: console
+
+apps:
+  - appID: minecraft-bot
+    appDirPath: ./04-minecraft-bot/bot
+    command: ["chainlit", "run", "app.py", "-w", "--port", "8001"]
+
